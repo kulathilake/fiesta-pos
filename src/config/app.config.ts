@@ -23,5 +23,8 @@ export const config = {
             description: "POS System Help",
             url: "https://staff.fiesta.lk/pos"
         }
-    ]
+    ],
+    flags: {
+        useActualSmsGateway: false
+    }
 }
