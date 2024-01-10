@@ -52,11 +52,13 @@ export async function POST(request: Request) {
         );
 
         if(otpSMSDeliveryRequest.status === 'OK') {
-            db.save({
+            await db.save({
                 requestId: otpGen.requestId,
                 sentAt: otpSMSDeliveryRequest.sentAt
             },OTP)
-    
+            
+            await db.disconnect();
+
             return Response.json({
               request_id: otpGen.requestId,
               employee_id: body.employee_id,
@@ -65,13 +67,15 @@ export async function POST(request: Request) {
             } as OTPRequestResponse);
 
         }else {
-            db.save({
+            await db.save({
                 requestId: otpGen.requestId,
                 isSent: false
             },OTP)
+            await db.disconnect();
             return Response.json("OTP_ERROR: failed to send OTP", {status:500})
         }
       } else {
+        await db.disconnect()
         return Response.json(
           "VALIDATION_ERROR: Invalid 'employee_id' and 'mobile_number' combination",
           { status: 401 }
