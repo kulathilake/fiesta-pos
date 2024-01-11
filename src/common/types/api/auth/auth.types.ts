@@ -16,3 +16,14 @@ export type OTPRequestResponse = {
     lifetime: number
     employee_id: number;
 }
+
+export const TokenRequestValidator = z.object({
+    request_id: z.string(),
+    otp: z.number()
+})
+
+export type TokenRequestBody = z.infer<typeof TokenRequestValidator>;
+
+export type TokenResponse = {
+    accessToken: string;
+}

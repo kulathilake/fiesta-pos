@@ -1,0 +1,67 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 6rem;
+    min-height: 100vh;
+  }
+
+  .description {
+    display: inherit;
+    justify-content: space-between;
+    align-items: inherit;
+    font-size: 0.85rem;
+    max-width: var(--max-width);
+    width: 100%;
+    font-family: var(--font-mono);
+  }
+
+  .description div h2 {
+    font-weight: 600;
+    margin-bottom: 0.7rem;
+  }
+  
+  .center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 4rem 0;
+  }
+
+  .center > form {
+    padding: 1rem;
+  }
+  .center > form > *{
+    display: flex
+  }
+
+  .input {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-width: 2px;
+    border-color: white;
+    border-radius: 5px;
+    color: white;
+    background-color: rgba(105, 95, 80, 0.283);
+  }
+
+  .button {
+    margin: 1rem 0 0 0;
+    padding: 1rem;
+  }
+
+  .video{
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    filter: brightness(20%);
+  }

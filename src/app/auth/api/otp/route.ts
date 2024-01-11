@@ -5,11 +5,12 @@ import {
   OTPRequestBody,
   OTPRequestResponse,
   OTPRequestValidator,
-} from "src/common/types/api/auth/otp.types";
+} from "src/common/types/api/auth/auth.types";
 import { PrismaClient } from '@prisma/client'
 import { OTPEngine } from "src/libs/server/otp/engine";
 import { SMSClientFactory } from "src/libs/server/sms/factory";
 import { hashPin } from "src/libs/utils/crypto";
+import { OTP_ERRORS } from "src/common/errors/otp.errors";
 
 /**
  * given an employee ID, generates a
@@ -31,14 +32,6 @@ export async function POST(request: Request) {
   try {
     OTPRequestValidator.parse(body);
     try {
-      // Find if employee id x mobilePhone combination exists
-      // const employee = await db.findOne<Employee>(
-      //   {
-      //     employeeId: body.employee_id,
-      //     mobileNumber: body.mobile_number,
-      //   },
-      // );
-
       const employee = await db.employee.findUnique({
         where: {
           id: body.employee_id,
@@ -46,7 +39,7 @@ export async function POST(request: Request) {
           hashedPin: hashPin(body.pin)
         }
       })
-
+      console.log(employee)
 
       if (employee) {
         // Generate OTP;
@@ -84,15 +77,12 @@ export async function POST(request: Request) {
               requestId: otpGen.requestId
             }
           })
-          .catch(error=>{
-            console.log("failed to update OTP")
-          })
-
-            return Response.json("OTP_ERROR: failed to send OTP", {status:500})
+            return Response.json(OTP_ERRORS.TRANSPORT_ERROR, {status:500})
         }
       } else {
+        console.log("errrrr")
         return Response.json(
-          "VALIDATION_ERROR: Invalid 'employee_id', 'pin, and 'mobile_number' combination",
+          OTP_ERRORS.INVALID_EMPID_PIN_MOBILE_COMB_ERROR,
           { status: 401 }
         );
       }
@@ -101,7 +91,7 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     return Response.json(
-      "VALIDATION_ERROR: 'employee_id' & 'mobile_number' are required ",
+      OTP_ERRORS.INVALID_PAYLOAD_ERROR,
       { status: 400 }
     );
   }

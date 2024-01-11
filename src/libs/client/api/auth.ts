@@ -4,7 +4,8 @@
  */
 
 import axios from "axios";
-import { OTPRequestResponse } from "src/common/types/api/auth/otp.types";
+import { OTP_ERRORS } from "src/common/errors/otp.errors";
+import { OTPRequestResponse } from "src/common/types/api/auth/auth.types";
 
 export class AuthAPIClient {
     /**
@@ -24,7 +25,25 @@ export class AuthAPIClient {
                 pin
             })).data   
         } catch (error) {
-            throw new Error("OTP_REQUEST_ERROR:",{cause:error})
+            throw new Error(OTP_ERRORS.OTP_REQUEST_ERROR,{cause:error})
+        }
+    }
+    /**
+     * requests a verification of a user provided OTP
+     * against a request id and obtains an access token.
+     * @param request_id 
+     * @param otp 
+     */
+    static async verifyOTP(
+        request_id: string,
+        otp: string
+    ){
+        try {
+            return (await axios.post('/auth/api/token',{
+
+            }))
+        } catch (error) {
+            
         }
     }
 }

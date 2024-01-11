@@ -34,7 +34,7 @@ export default function Home() {
         </div>
 
         <div className={styles.center}>
-
+          
         </div>
 
         <div className={styles.grid}>
