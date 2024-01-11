@@ -41,6 +41,8 @@ export async function POST(request: Request) {
         }
       })
 
+      console.log(hashPin(body.pin));
+      console.log(body)
       if (employee) {
         // Generate OTP;
         

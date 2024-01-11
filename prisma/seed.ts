@@ -108,7 +108,7 @@ async function main(){
             id: 100,
             name: "Kolitha",
             hashedPin: crypto.createHash('sha256').update(pins[100]).digest('hex'),
-            mobile: 772008505
+            mobile: 94772008505
         }
     });
 
@@ -121,7 +121,7 @@ async function main(){
             id: 200,
             name: "Shehan",
             hashedPin: crypto.createHash('sha256').update(pins[200]).digest('hex'),
-            mobile: 773121022
+            mobile: 94773121022
         }
     });
 
@@ -134,7 +134,7 @@ async function main(){
             id: 300,
             name: "Kanishka",
             hashedPin: crypto.createHash('sha256').update(pins[300]).digest('hex'),
-            mobile: 719575003
+            mobile: 94719575003
         }
     });
 
@@ -147,7 +147,7 @@ async function main(){
             id: 400,
             name: "Jeewantha",
             hashedPin: crypto.createHash('sha256').update(pins[400]).digest('hex'),
-            mobile: 755841388
+            mobile: 94755841388
         }
     });
 

@@ -8,7 +8,7 @@ import { OTPRequestResponse, TokenResponse } from "src/common/types/api/auth/aut
 
 export class AuthAPIClient {
     private static instance: AuthAPIClient;
-    private token?: string;
+    private _token?: string;
 
     static getInstance(){
         if(this.instance){
@@ -54,7 +54,7 @@ export class AuthAPIClient {
                 otp
             })).data as TokenResponse
 
-            AuthAPIClient.getInstance().token = tokenRes.accessToken;
+            AuthAPIClient.getInstance()._token = tokenRes.accessToken;
             localStorage.setItem('0',tokenRes.accessToken);
             return tokenRes.accessToken;
         } catch (error) {
@@ -74,5 +74,9 @@ export class AuthAPIClient {
         } catch (error) {
             return false;
         }
+    }
+
+    get token(){
+        return this._token;
     }
 }
