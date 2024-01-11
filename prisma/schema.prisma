@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id  Int @id @default(autoincrement())
+  hashedPin String
+  name String
+  mobile BigInt
+  otps  OTP[]
+}
+
+model OTP {
+  requestId String @id @unique
+  employee Employee @relation(fields: [employeeId], references: [id])
+  employeeId Int
+  otp Int
+  lifetime Int 
+  isSent Boolean
+  sentAt DateTime?
+  isUsed Boolean
+  usedAt DateTime?
+  isExpired Boolean
+}

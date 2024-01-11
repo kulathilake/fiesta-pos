@@ -4,8 +4,9 @@
 import {z} from 'zod';
 
 export const OTPRequestValidator = z.object({
-    employee_id: z.string(),
-    mobile_number: z.string()
+    employee_id: z.number(),
+    mobile_number: z.number(),
+    pin: z.string()
 }); 
 export type OTPRequestBody = z.infer<typeof OTPRequestValidator>;
 
@@ -13,5 +14,5 @@ export type OTPRequestResponse = {
     request_id:string;
     sent_at: number;
     lifetime: number
-    employee_id: string;
+    employee_id: number;
 }

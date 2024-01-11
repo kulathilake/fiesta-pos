@@ -5,7 +5,7 @@ import { ShoutoutSMSClient } from "./shoutout";
 
 export class SMSClientFactory{
     static getClient():SMSClient {
-        if(config.flags.useActualSmsGateway){
+        if(process.env.USE_SHOUTOUT_SMS==='true'){
             return new ShoutoutSMSClient();
         }else{
             return new DummySMSClient();

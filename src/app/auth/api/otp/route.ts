@@ -6,11 +6,10 @@ import {
   OTPRequestResponse,
   OTPRequestValidator,
 } from "src/common/types/api/auth/otp.types";
-import { Employee } from "src/entities/Employee";
-import { OTP } from "src/entities/OTP";
-import { DB } from "src/libs/server/db";
+import { PrismaClient } from '@prisma/client'
 import { OTPEngine } from "src/libs/server/otp/engine";
 import { SMSClientFactory } from "src/libs/server/sms/factory";
+import { hashPin } from "src/libs/utils/crypto";
 
 /**
  * given an employee ID, generates a
@@ -26,25 +25,32 @@ import { SMSClientFactory } from "src/libs/server/sms/factory";
  */
 export async function POST(request: Request) {
   const body = (await request.json()) as OTPRequestBody;
-  const db = new DB();
   const smsClient = SMSClientFactory.getClient();
-  const otpEngine = new OTPEngine(db);
-
+  const otpEngine = new OTPEngine();
+  const db = new PrismaClient();
   try {
     OTPRequestValidator.parse(body);
     try {
       // Find if employee id x mobilePhone combination exists
-      const employee = await db.findOne(
-        {
-          employeeId: body.employee_id,
-          mobileNumber: body.mobile_number,
-        },
-        Employee
-      );
+      // const employee = await db.findOne<Employee>(
+      //   {
+      //     employeeId: body.employee_id,
+      //     mobileNumber: body.mobile_number,
+      //   },
+      // );
+
+      const employee = await db.employee.findUnique({
+        where: {
+          id: body.employee_id,
+          mobile: body.mobile_number,
+          hashedPin: hashPin(body.pin)
+        }
+      })
+
 
       if (employee) {
         // Generate OTP;
-        const otpGen = await otpEngine.generateOTP(employee);
+        const otpGen = await otpEngine.generateOTP(employee.id);
         // Send OTP
         const otpSMSDeliveryRequest = await smsClient.sendOTP(
           body.mobile_number,
@@ -52,13 +58,16 @@ export async function POST(request: Request) {
         );
 
         if(otpSMSDeliveryRequest.status === 'OK') {
-            await db.save({
-                requestId: otpGen.requestId,
-                sentAt: otpSMSDeliveryRequest.sentAt
-            },OTP)
-            
-            await db.disconnect();
-
+            // TODO: Update OTP in DB
+            await db.oTP.update({
+              data: {
+                isSent: true,
+                sentAt: new Date(otpSMSDeliveryRequest.sentAt)
+              },
+              where: {
+                requestId: otpGen.requestId
+              }
+            });
             return Response.json({
               request_id: otpGen.requestId,
               employee_id: body.employee_id,
@@ -67,22 +76,28 @@ export async function POST(request: Request) {
             } as OTPRequestResponse);
 
         }else {
-            await db.save({
-                requestId: otpGen.requestId,
-                isSent: false
-            },OTP)
-            await db.disconnect();
+          await db.oTP.update({
+            data: {
+              isSent: false,
+            },
+            where: {
+              requestId: otpGen.requestId
+            }
+          })
+          .catch(error=>{
+            console.log("failed to update OTP")
+          })
+
             return Response.json("OTP_ERROR: failed to send OTP", {status:500})
         }
       } else {
-        await db.disconnect()
         return Response.json(
-          "VALIDATION_ERROR: Invalid 'employee_id' and 'mobile_number' combination",
+          "VALIDATION_ERROR: Invalid 'employee_id', 'pin, and 'mobile_number' combination",
           { status: 401 }
         );
       }
     } catch (error) {
-      return Response.json(error);
+      return Response.json('Server Error',{status:500});
     }
   } catch (error) {
     return Response.json(

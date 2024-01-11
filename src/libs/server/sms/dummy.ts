@@ -10,7 +10,7 @@ export class DummySMSClient implements SMSClient {
   }
   
   sendOTP(
-    mobile: string,
+    mobile: number,
     otp: number
   ): Promise<{ status: any; sentAt: number }> {
     this.printTitleLine("sendOTP");
@@ -20,6 +20,6 @@ export class DummySMSClient implements SMSClient {
         otp,
       },
     ]);
-    return Promise.resolve({ status: "SUCCESS", sentAt: Date.now() });
+    return Promise.resolve({ status: "OK", sentAt: Date.now() });
   }
 }

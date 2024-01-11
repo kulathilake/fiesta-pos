@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.8.0",
     "axios": "^1.6.5",
     "next": "14.0.4",
     "react": "^18",
@@ -16,7 +17,6 @@
     "reflect-metadata": "^0.2.1",
     "short-uuid": "^4.2.2",
     "typedi": "^0.10.0",
-    "typeorm": "^0.3.19",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -25,6 +25,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
+    "prisma": "^5.8.0",
     "typescript": "^5"
   }
 }

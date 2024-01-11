@@ -24,7 +24,4 @@ export const config = {
             url: "https://staff.fiesta.lk/pos"
         }
     ],
-    flags: {
-        useActualSmsGateway: false
-    }
 }
