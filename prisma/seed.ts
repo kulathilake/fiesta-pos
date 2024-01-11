@@ -5,10 +5,10 @@
 import { PrismaClient } from "@prisma/client";
 import crypto from 'crypto';
 
-// categories.
 const db = new PrismaClient()
 
 async function main(){
+    // Categories
     const friedRice = await db.itemCategory.upsert({
         where: {id: 0},
         update: {},
@@ -101,7 +101,9 @@ async function main(){
     // Employees.
     const employee1 = await db.employee.upsert({
         where: {id: 100},
-        update: {},
+        update: {
+            hashedPin: crypto.createHash('sha256').update(pins[100]).digest('hex'),
+        },
         create: {
             id: 100,
             name: "Kolitha",
@@ -112,7 +114,9 @@ async function main(){
 
     const employee2 = await db.employee.upsert({
         where: {id: 200},
-        update: {},
+        update: {
+            hashedPin: crypto.createHash('sha256').update(pins[200]).digest('hex'),
+        },
         create: {
             id: 200,
             name: "Shehan",
@@ -123,7 +127,9 @@ async function main(){
 
     const employee3 = await db.employee.upsert({
         where: {id: 300},
-        update: {},
+        update: {
+            hashedPin: crypto.createHash('sha256').update(pins[300]).digest('hex'),
+        },
         create: {
             id: 300,
             name: "Kanishka",
@@ -134,7 +140,9 @@ async function main(){
 
     const employee4 = await db.employee.upsert({
         where: {id: 400},
-        update: {},
+        update: {
+            hashedPin: crypto.createHash('sha256').update(pins[400]).digest('hex'),
+        },
         create: {
             id: 400,
             name: "Jeewantha",
