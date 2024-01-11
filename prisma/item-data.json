@@ -1,0 +1,224 @@
+[
+    {
+      "name": "Chicken Fried Rice",
+      "price": 980,
+      "photo": "",
+      "category": 20
+    },
+    {
+      "name": "Beef Fried Rice",
+      "price": 1200,
+      "photo": "",
+      "category": 20
+    },
+    {
+      "name": "Pork Fried Rice",
+      "price": 1400,
+      "photo": "",
+      "category": 20
+    },
+    {
+      "name": "Sea Food Fried Rice",
+      "price": 1400,
+      "photo": "",
+      "category": 20
+    },
+    {
+      "name": "Mixed Fried Rice",
+      "price": 1800,
+      "photo": "",
+      "category": 20
+    },
+    {
+      "name": "Vege Fried Rice*",
+      "price": 650,
+      "photo": "",
+      "category": 20
+    },
+    {
+      "name": "Egg Fried Rice",
+      "price": 850,
+      "photo": "",
+      "category": 20
+    },
+    {
+      "name": "Chicken Kottu",
+      "price": 900,
+      "photo": "",
+      "category": 21
+    },
+    {
+      "name": "Beef Kottu",
+      "price": 1000,
+      "photo": "",
+      "category": 21
+    },
+    {
+      "name": "Pork Kottu",
+      "price": 1200,
+      "photo": "",
+      "category": 21
+    },
+    {
+      "name": "Sea Food Kottu",
+      "price": 1300,
+      "photo": "",
+      "category": 21
+    },
+    {
+      "name": "Egg Kottu",
+      "price": 900,
+      "photo": "",
+      "category": 21
+    },
+    {
+      "name": "Vege Kottu*",
+      "price": 850,
+      "photo": "",
+      "category": 21
+    },
+    {
+      "name": "Chicken Cheese Kottu",
+      "price": 1200,
+      "photo": "",
+      "category": 21
+    },
+    {
+      "name": "Devilled Chicken",
+      "price": 700,
+      "photo": "",
+      "category": 22
+    },
+    {
+      "name": "Devilled Beef",
+      "price": 800,
+      "photo": "",
+      "category": 22
+    },
+    {
+      "name": "Devilled Pork",
+      "price": 900,
+      "photo": "",
+      "category": 22
+    },
+    {
+      "name": "Omellete",
+      "price": 450,
+      "photo": "",
+      "category": 22
+    },
+    {
+      "name": "Chicken Cheese Omellette",
+      "price": 650,
+      "photo": "",
+      "category": 22
+    },
+    {
+      "name": "French Fries",
+      "price": 550,
+      "photo": "",
+      "category": 22
+    },
+    {
+      "name": "Chicken BBQ",
+      "price": 500,
+      "photo": "",
+      "category": 23
+    },
+    {
+      "name": "Beef BBQ",
+      "price": 750,
+      "photo": "",
+      "category": 23
+    },
+    {
+      "name": "Pork BBQ",
+      "price": 850,
+      "photo": "",
+      "category": 23
+    },
+    {
+      "name": "Mixed Platter",
+      "price": 4500,
+      "photo": "",
+      "category": 23
+    },
+    {
+      "name": "Grilled Potatoes",
+      "price": 950,
+      "photo": "",
+      "category": 23
+    },
+    {
+      "name": "Garlic Bread",
+      "price": 450,
+      "photo": "",
+      "category": 23
+    },
+    {
+      "name": "Chicken Burger",
+      "price": 950,
+      "photo": "",
+      "category": 24
+    },
+    {
+      "name": "Beef Burger",
+      "price": 1020,
+      "photo": "",
+      "category": 24
+    },
+    {
+      "name": "Tuna Burger",
+      "price": 550,
+      "photo": "",
+      "category": 24
+    },
+    {
+      "name": "Chicken Submarine",
+      "price": 1100,
+      "photo": "",
+      "category": 25
+    },
+    {
+      "name": "Beef Submarine",
+      "price": 1400,
+      "photo": "",
+      "category": 25
+    },
+    {
+      "name": "Tuna Submarine",
+      "price": 1000,
+      "photo": "",
+      "category": 25
+    },
+    {
+      "name": "Cinnamon Chai",
+      "price": 250,
+      "photo": "",
+      "category": 26
+    },
+    {
+      "name": "Masala Chai",
+      "price": 150,
+      "photo": "",
+      "category": 26
+    },
+    {
+      "name": "Chicken Biriyani",
+      "price": 750,
+      "photo": "",
+      "category": 27
+    },
+    {
+      "name": "Sweet Cheese Corn",
+      "price": 400,
+      "photo": "",
+      "category": 28
+    },
+    {
+      "name": "Spicy Cheese Corn",
+      "price": 400,
+      "photo": "",
+      "category": 28
+    }
+   ]

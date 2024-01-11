@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { AuthAPIClient } from "src/libs/client/api/auth";
 import { redirect } from "next/navigation";
 import { Button, NextUIProvider } from "@nextui-org/react";
+import { ItemBrowser } from "src/components/Items/ItemBrowser.component";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -45,7 +46,7 @@ export default function AppLayout({
   return (
     <html lang="en">
       <NextUIProvider>
-      <body className={inter.className}>
+      <body className={`${inter.className} dark`}>
         <main className={styles.main} style={{ 
             background: "url('/app-bg.jpg')",
             backgroundSize: 'cover'
@@ -69,7 +70,7 @@ export default function AppLayout({
               <BillSideBarComponent/>
             </div>
             <div className={styles.itemSelection}>
-              Items.
+              <ItemBrowser/>
             </div>
             <div className={styles.bill}>
               Current Bill

@@ -4,13 +4,14 @@
 
 import { PrismaClient } from "@prisma/client";
 import crypto from 'crypto';
+import items from './item-data.json';
 
 const db = new PrismaClient()
 
 async function main(){
     // Categories
     const friedRice = await db.itemCategory.upsert({
-        where: {id: 0},
+        where: {id: 1},
         update: {},
         create: {
             label: 'Fried Rice',
@@ -19,7 +20,7 @@ async function main(){
     });
 
     const kottu = await db.itemCategory.upsert({
-        where: {id: 1},
+        where: {id: 2},
         update: {},
         create: {
             label: 'Kottu',
@@ -28,7 +29,7 @@ async function main(){
     });
 
     const side = await db.itemCategory.upsert({
-        where: {id: 2},
+        where: {id: 3},
         update: {},
         create: {
             label: 'Sides',
@@ -37,7 +38,7 @@ async function main(){
     });
 
     const bbq = await db.itemCategory.upsert({
-        where: {id: 3},
+        where: {id: 4},
         update: {},
         create: {
             label: 'BBQ',
@@ -46,7 +47,7 @@ async function main(){
     });
 
     const burger = await db.itemCategory.upsert({
-        where: {id: 4},
+        where: {id: 5},
         update: {},
         create: {
             label: 'Burger',
@@ -55,7 +56,7 @@ async function main(){
     });
 
     const submarine = await db.itemCategory.upsert({
-        where: {id: 5},
+        where: {id: 6},
         update: {},
         create: {
             label: 'Submarines',
@@ -64,7 +65,7 @@ async function main(){
     });
 
     const chai = await db.itemCategory.upsert({
-        where: {id: 6},
+        where: {id: 7},
         update: {},
         create: {
             label: 'Chai',
@@ -73,7 +74,7 @@ async function main(){
     });
 
     const biriyani = await db.itemCategory.upsert({
-        where: {id: 7},
+        where: {id: 8},
         update: {},
         create: {
             label: 'Biriyani',
@@ -82,7 +83,7 @@ async function main(){
     });
 
     const cheeseCorn = await db.itemCategory.upsert({
-        where: {id:8},
+        where: {id:9},
         update: {},
         create: {
             label: 'Cheese Corn',
@@ -90,7 +91,20 @@ async function main(){
         }
     });
 
-    
+    //Items
+    await Promise.all(items.map((item,i)=>(
+        db.item.upsert({
+            where: {id: i},
+            update: {},
+            create: {
+                name: item.name,
+                photo: item.photo,
+                price: item.price,
+                categoryId: item.category
+            }
+        })
+    ))).catch(console.log)
+
     const pins = {
         100: generateRandomPIN(),
         200: generateRandomPIN(),
