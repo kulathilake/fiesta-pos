@@ -13,7 +13,7 @@ export type OTPRequestBody = z.infer<typeof OTPRequestValidator>;
 export type OTPRequestResponse = {
     request_id:string;
     sent_at: number;
-    lifetime: number
+    expiresAt: number
     employee_id: number;
 }
 

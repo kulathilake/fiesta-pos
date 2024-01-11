@@ -23,10 +23,9 @@ model OTP {
   employee Employee @relation(fields: [employeeId], references: [id])
   employeeId Int
   otp Int
-  lifetime Int 
   isSent Boolean
   sentAt DateTime?
   isUsed Boolean
   usedAt DateTime?
-  isExpired Boolean
+  expiresAt DateTime
 }

@@ -5,7 +5,7 @@ import styles from "./page.module.css";
 import Link from 'next/link';
 import { FormEventHandler, useState } from 'react';
 import { OTPRequestResponse } from 'src/common/types/api/auth/auth.types';
-import { OTP_ERRORS } from 'src/common/errors/otp.errors';
+import { OTP_ERRORS } from 'src/common/errors/auth.errors';
 
 export default function SignIn() {
     const [otpReqRes, setOtpReqRes] = useState<OTPRequestResponse>();
@@ -18,10 +18,8 @@ export default function SignIn() {
         const pin = data.get('employee-pin') as string;
         try {
             const otpRequest = (await AuthAPIClient.requestOtp(id, mobile, pin));
-
             setOtpReqRes(otpRequest);
         } catch (error) {
-            console.log(error)
             switch ((error as any).message as OTP_ERRORS) {
                 case OTP_ERRORS.INVALID_EMPID_PIN_MOBILE_COMB_ERROR:
                     alert("Invalid Employee PIN or Mobile Number");
@@ -33,6 +31,21 @@ export default function SignIn() {
                     break;
             }
         }
+    }
+
+    const handleTokenRequestClick: FormEventHandler<HTMLFormElement> = async (e) => {
+        e.preventDefault();
+        const data = new FormData(e.target as HTMLFormElement);
+        const otp = Number(data.get('otp'))
+        try {
+            if(otpReqRes){
+                const tokenReq = (await AuthAPIClient.requestToken(otpReqRes?.request_id,otp));
+                console.log(tokenReq)
+            }
+        } catch (error) {
+            
+        }
+
     }
 
     return (
@@ -75,11 +88,10 @@ export default function SignIn() {
                         <input className={styles.input} type='tel' name="employee-mobile" required />
                         <button className={styles.button} type="submit">Sign in</button>
                     </form> :
-                    <form id="opt-form">
+                    <form id="opt-form" onSubmit={handleTokenRequestClick}>
                         <label htmlFor='otp'>OTP</label>
-                        <input className={styles.input} type='number' name="employee-otp" />
+                        <input className={styles.input} type='number' name="otp" required/>
                         <button className={styles.button} type="submit">Verify</button>
-
                     </form>
                 }
 

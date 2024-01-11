@@ -10,7 +10,7 @@ import { PrismaClient } from '@prisma/client'
 import { OTPEngine } from "src/libs/server/otp/engine";
 import { SMSClientFactory } from "src/libs/server/sms/factory";
 import { hashPin } from "src/libs/utils/crypto";
-import { OTP_ERRORS } from "src/common/errors/otp.errors";
+import { OTP_ERRORS } from "src/common/errors/auth.errors";
 
 /**
  * given an employee ID, generates a
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
   try {
     OTPRequestValidator.parse(body);
     try {
+
       const employee = await db.employee.findUnique({
         where: {
           id: body.employee_id,
@@ -39,10 +40,10 @@ export async function POST(request: Request) {
           hashedPin: hashPin(body.pin)
         }
       })
-      console.log(employee)
 
       if (employee) {
         // Generate OTP;
+        
         const otpGen = await otpEngine.generateOTP(employee.id);
         // Send OTP
         const otpSMSDeliveryRequest = await smsClient.sendOTP(
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
             return Response.json({
               request_id: otpGen.requestId,
               employee_id: body.employee_id,
-              lifetime: otpGen.lifetime,
+              expiresAt: otpGen.expiresAt,
               sent_at: otpSMSDeliveryRequest.sentAt,
             } as OTPRequestResponse);
 
@@ -80,7 +81,6 @@ export async function POST(request: Request) {
             return Response.json(OTP_ERRORS.TRANSPORT_ERROR, {status:500})
         }
       } else {
-        console.log("errrrr")
         return Response.json(
           OTP_ERRORS.INVALID_EMPID_PIN_MOBILE_COMB_ERROR,
           { status: 401 }

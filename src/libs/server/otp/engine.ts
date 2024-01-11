@@ -4,6 +4,7 @@
 import crypto from 'crypto';
 import short from 'short-uuid';
 import { PrismaClient } from '@prisma/client';
+import {DateTime} from 'luxon';
 
 const OTP_LIFETIME_IN_MSEC = 300000;
 
@@ -17,29 +18,32 @@ export class OTPEngine {
     async generateOTP(employeeId: number):Promise<{
         requestId:string;
         otp:number;
-        lifetime: number
+        expiresAt: number
     }>{
         const randomValue = crypto.randomBytes(3).readUIntBE(0, 3);
         const otp = randomValue % 1000000;
         const requestId = short().new();
+
+        const expiresAt = DateTime.now().plus({
+            milliseconds: OTP_LIFETIME_IN_MSEC
+        }).toJSDate()
     
         // TODO: Persist OTP
         await this.db.oTP.create({
             data: {
                 requestId,
                 otp,
-                lifetime: OTP_LIFETIME_IN_MSEC,
-                isExpired: false,
+                expiresAt,
                 isSent: false,
                 isUsed: false,
-                employeeId
+                employeeId,
             }
         })
 
         return {
             requestId: requestId,
             otp: otp,
-            lifetime: OTP_LIFETIME_IN_MSEC
+            expiresAt: +expiresAt
         }
     }
 }
