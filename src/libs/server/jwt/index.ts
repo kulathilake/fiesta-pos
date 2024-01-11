@@ -8,7 +8,7 @@ const SECRET = process.env.SERVER_SECRET || 'secret'
 export function signJWT(employeeId: number){
     return jwt.sign({
         employee: employeeId
-    },SECRET, {expiresIn: '2h'})
+    },SECRET, {expiresIn: '18h'})
 }
 
 

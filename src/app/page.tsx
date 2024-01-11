@@ -1,9 +1,29 @@
+'use client'
+
 import Image from 'next/image'
 import styles from './page.module.css'
 import Link from 'next/link'
 import { config } from 'src/config/app.config'
+import { useEffect, useState } from 'react'
+import { AuthAPIClient } from 'src/libs/client/api/auth'
+import { redirect } from 'next/navigation'
 
 export default function Home() {
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(()=>{
+    const localToken = localStorage.getItem('0');
+    if(localToken){
+      AuthAPIClient.verifyLocalToken(localToken)
+        .then(isValid=>{
+          setIsAuthorized(isValid);
+        })
+    }
+  },[]);
+  
+  if(isAuthorized){
+    redirect('/app');
+  }
   return (
     <>
       <video autoPlay muted loop className={styles.video}>

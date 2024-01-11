@@ -3,13 +3,20 @@ import Image from 'next/image'
 import { AuthAPIClient } from "src/libs/client/api/auth";
 import styles from "./page.module.css";
 import Link from 'next/link';
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import { OTPRequestResponse } from 'src/common/types/api/auth/auth.types';
-import { OTP_ERRORS } from 'src/common/errors/auth.errors';
+import { OTP_ERRORS, TOKEN_ISSUE_ERRORS } from 'src/common/errors/auth.errors';
+import { redirect } from 'next/navigation';
 
 export default function SignIn() {
+    const [isAuthorized, setIsAuthorized] = useState(false);
     const [otpReqRes, setOtpReqRes] = useState<OTPRequestResponse>();
 
+    useEffect(()=>{
+        if(isAuthorized){
+            redirect('/app')
+        }
+    },[isAuthorized])
     const handleRequestOtpClick: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         const data = new FormData(e.target as HTMLFormElement);
@@ -40,10 +47,20 @@ export default function SignIn() {
         try {
             if(otpReqRes){
                 const tokenReq = (await AuthAPIClient.requestToken(otpReqRes?.request_id,otp));
-                console.log(tokenReq)
+                setIsAuthorized(!!tokenReq)
             }
         } catch (error) {
-            
+            switch((error as any).message as TOKEN_ISSUE_ERRORS){
+                case TOKEN_ISSUE_ERRORS.INVALID_OTP_ERROR:
+                    alert("Invalid OTP");
+                    break;
+                case TOKEN_ISSUE_ERRORS.OTP_EXPIRED_ERROR:
+                    alert("OTP Expired");
+                    break;
+                case TOKEN_ISSUE_ERRORS.INVALID_PAYLOAD_ERROR:
+                default:
+                    alert("Something went wrong");
+            }
         }
 
     }

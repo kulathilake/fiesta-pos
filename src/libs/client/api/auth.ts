@@ -4,10 +4,20 @@
  */
 
 import axios from "axios";
-import { OTP_ERRORS } from "src/common/errors/auth.errors";
 import { OTPRequestResponse, TokenResponse } from "src/common/types/api/auth/auth.types";
 
 export class AuthAPIClient {
+    private static instance: AuthAPIClient;
+    private token?: string;
+
+    static getInstance(){
+        if(this.instance){
+            return this.instance;
+        }else {
+            this.instance = new AuthAPIClient();
+            return this.instance;
+        }
+    }
     /**
      * Creates a POST request to 'auth/api/otp'
      * @param employee_id 
@@ -25,7 +35,7 @@ export class AuthAPIClient {
                 pin
             })).data   
         } catch (error) {
-            throw new Error(OTP_ERRORS.OTP_REQUEST_ERROR,{cause:error})
+            throw error;
         }
     }
     /**
@@ -39,12 +49,30 @@ export class AuthAPIClient {
         otp: number
     ){
         try {
-            return (await axios.post('/auth/api/token',{
+            const tokenRes =  (await axios.post('/auth/api/token',{
                 request_id,
                 otp
             })).data as TokenResponse
+
+            AuthAPIClient.getInstance().token = tokenRes.accessToken;
+            localStorage.setItem('0',tokenRes.accessToken);
+            return tokenRes.accessToken;
         } catch (error) {
-            
+            console.log(error);
+            throw error;
+        }
+    }
+
+    static async verifyLocalToken(token:string) {
+        try {
+            const res = (await axios.post('/auth/api/token/verify',{},{
+                headers: {
+                    'Authorization': token
+                }
+            }));
+            return !!res;
+        } catch (error) {
+            return false;
         }
     }
 }
