@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@prisma/client": "^5.8.0",
-    "@types/luxon": "^3.4.0",
     "axios": "^1.6.5",
     "jsonwebtoken": "^9.0.2",
     "luxon": "^3.4.4",
@@ -24,12 +23,18 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/node": "^20",
+    "@types/luxon": "^3.4.0",
+    "@types/node": "^20.11.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "prisma": "^5.8.0",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }
