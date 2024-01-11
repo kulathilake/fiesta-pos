@@ -29,3 +29,64 @@ model OTP {
   usedAt DateTime?
   expiresAt DateTime
 }
+
+model ItemCategory {
+  id Int @id @default(autoincrement())
+  label String
+  items Item[]
+}
+model Item {
+  id Int @id @default(autoincrement())
+  name String
+  price Float
+  photo String
+  category ItemCategory @relation(fields: [categoryId],references: [id])
+  categoryId Int
+}
+
+// Bills
+model BillItem{
+  id Int @id @default(autoincrement())
+  bill Bill @relation(fields: [billId], references: [id])
+  billId String
+  qty Float
+}
+
+model Bill {
+  id String @id @unique
+  items BillItem[]
+  isDineIn Boolean
+  table Int?
+  type BillType
+  openedAt DateTime
+  closedAt DateTime?
+  payment BillPayment?
+  status BillStatus
+}
+
+model BillPayment {
+  paymentId Int @id @default(autoincrement())
+  bill Bill @relation(fields: [billId], references: [id])
+  billId String @unique
+  mode PaymentMode
+  total Float
+  tendered Float 
+  balance Float
+  paidAt DateTime
+}
+
+// Enums
+enum BillType {
+  DINEIN
+  TAKEOUT
+}
+enum BillStatus {
+  OPEN
+  CANCELLED
+  PAID
+}
+
+enum PaymentMode {
+  CASH
+  CARD
+}
