@@ -6,19 +6,16 @@ import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BillView } from "src/components/CurrBillSideBar/BillView.component";
+import { useBillStore } from "src/libs/client/store/bill.store";
 
 export default function Bill(props:any){
-    const router = useRouter();
-    const [bill,setBill] = useState<Bill>();
+    const billStore = useBillStore(state=>state);
     useEffect(()=>{
-    
-    },[props])
-    if(bill) return (
-        <BillView {...bill}/>
-    )
-
-    return <div className="flex flex-col justify-center items-center w-full h-full ">
-        <Code>No Bill Selected</Code>
-        <small>Select a bill or Create a New Bill</small>
-    </div>;
+        const billId = props.params.id;
+        const currBill = billStore.openBills.find(b=>b.id === billId);
+        if(currBill && !billStore.currBill){
+            billStore.setCurrentBill(currBill)
+        }
+    },[props,billStore.openBills])
+    return (<BillView/>)
 }

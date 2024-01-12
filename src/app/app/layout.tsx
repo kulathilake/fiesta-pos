@@ -2,7 +2,7 @@
 import { Inter } from "next/font/google"
 import styles from './layout.module.css';
 import Image from "next/image";
-import { BillSideBarComponent } from "src/components/BillsSideBar/BillSideBar.component";
+import { BillSideBarComponent } from "src/components/OpenBillsBar/BillSideBar.component";
 import { useEffect, useState } from "react";
 import { AuthAPIClient } from "src/libs/client/api/auth";
 import { redirect } from "next/navigation";
@@ -20,6 +20,7 @@ export default function AppLayout({
 }) {
   const [authCheckInProgress,setAuthCheckInProgress] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
+
   useEffect(()=>{
     const localToken = localStorage.getItem('0');
     const inMemoryToken = AuthAPIClient.getInstance().token;
@@ -37,7 +38,9 @@ export default function AppLayout({
       setAuthCheckInProgress(false);
     }
 
-  },[])
+  },[]);
+
+
   if(authCheckInProgress && !isAuthorized) {
     return <p>loading...</p>
   }
@@ -66,7 +69,7 @@ export default function AppLayout({
           </div>
           <div className={styles.center}>
             <div className={styles.leftSideBar}>
-              <BillSideBarComponent selected={1}/>
+              <BillSideBarComponent/>
             </div>
             <div className={styles.itemSelection}>
               <ItemBrowser/>

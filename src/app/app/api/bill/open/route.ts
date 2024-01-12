@@ -13,7 +13,11 @@ export async function GET(){
                 status: BillStatus.OPEN
             },
             include: {
-                items: true
+                items: {
+                    include:{
+                        item: true
+                    }
+                }
             }
         });
         return Response.json(res);

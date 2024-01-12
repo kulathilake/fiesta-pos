@@ -5,32 +5,36 @@ import { useEffect, useState } from "react";
 import { OpenBillModal } from "./OpenBillModal.component";
 import { Bill } from "@prisma/client";
 import { BillAPI } from "src/libs/client/api/bill";
+import { useBillStore } from "src/libs/client/store/bill.store";
 
 
-export function BillSideBarComponent(props: { selected: string }) {
-    const [openBills,setOpenBills] = useState<Bill[]>([]);
-    const [currBill, setCurrBill] = useState<string>(props.selected);
+export function BillSideBarComponent() {
+    
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     
+    const billStore = useBillStore(state=>state);
+
     useEffect(()=>{
         BillAPI.getOpenBills()
             .then(res=>{
-                setOpenBills(res);
-                console.log(res);
+                billStore.updateBillList(res);
             })
             .catch(e => {
                 // ... handle error
             })
     },[])
 
-    const handleBillClick = (bill: string) => {
-        router.push(`/app/bill/${bill}`);
-        setCurrBill(bill);
+    const handleBillClick = (billId: string) => {
+        const bill = billStore.openBills.find(b=>b.id===billId);
+        if(bill){
+            router.push(`/app/bill/${billId}`);
+            billStore.setCurrentBill(bill);
+        }
     }
    
     const getOpenBillList = () => {
-        return openBills.map(b => (
+        return billStore.openBills.map(b => (
             <ListboxItem key={b.id} onClick={()=>handleBillClick(b.id)}>{
                 b.type === 'DINEIN' ? `Table ${b.table} Bill` : `Takout Bill (${b.id})`
             }</ListboxItem>
@@ -45,7 +49,7 @@ export function BillSideBarComponent(props: { selected: string }) {
                 <Listbox
                     variant="flat"
                     color="warning"
-                    selectedKeys={currBill ? [currBill] : []}
+                    selectedKeys={billStore.currBill ? [billStore.currBill.id] : []}
                     selectionMode="single"
                 >
                     {getOpenBillList()}

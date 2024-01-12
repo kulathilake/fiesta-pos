@@ -43,12 +43,15 @@ model Item {
   photo String
   category ItemCategory @relation(fields: [categoryId],references: [id])
   categoryId Int
+  billItems BillItem[]
 }
 
 // Bills
 model BillItem{
   id Int @id @default(autoincrement())
   bill Bill @relation(fields: [billId], references: [id])
+  item Item @relation(fields: [itemId], references: [id])
+  itemId Int
   billId String
   qty Float
 }

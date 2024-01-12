@@ -1,4 +1,4 @@
-import { BillType } from "@prisma/client";
+import { Bill, BillType, BillItem, Item } from "@prisma/client";
 import { z } from "zod";
 
 export const OpenBillValidator = z.object({
@@ -7,3 +7,6 @@ export const OpenBillValidator = z.object({
 })
 
 export type OpenBillReqBody = z.infer<typeof OpenBillValidator>
+
+export type BillItemWithItem = BillItem & {item: Item}
+export type BillWithItems = Bill & {items: BillItemWithItem[]}

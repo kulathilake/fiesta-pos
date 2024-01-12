@@ -9,8 +9,10 @@ import { ItemAPI } from "src/libs/client/api/item"
 import { getSectionLabel } from "./utils";
 import { Section } from "@prisma/client";
 import { CategoryItemBrowser } from "./CategoryItemBrowser.component";
+import { useBillStore } from "src/libs/client/store/bill.store";
 
 export function ItemBrowser() {
+    const billStore = useBillStore(state=>state);
     const [categories,setCategories] = useState<{id:number, label:string, section:string}[]>([]);
     const [sections,setSections] = useState<string[]>([]);
 
