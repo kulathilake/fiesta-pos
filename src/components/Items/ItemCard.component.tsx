@@ -1,6 +1,7 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import { Item } from "@prisma/client";
 import Image from "next/image";
+import { formatNumberToCurrency } from "src/libs/utils/currency";
 
 export function ItemCard(props: Item) {
     return (
@@ -19,7 +20,7 @@ export function ItemCard(props: Item) {
                 />
             </CardBody>
             <CardFooter>
-
+                <h4 className="font-bold text-large">{formatNumberToCurrency(props.price)}</h4>
             </CardFooter>
         </Card>
     )

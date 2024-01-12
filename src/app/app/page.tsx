@@ -1,5 +1,5 @@
 export default function AppHome(){
     return (
-        <p>app home</p>
+        <p>Select or Open a New Bill</p>
     )
 }

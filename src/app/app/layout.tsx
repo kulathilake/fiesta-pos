@@ -13,12 +13,13 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function AppLayout({
   children,
+  params
 }: {
-  children: React.ReactNode
+  children: React.ReactNode,
+  params: any
 }) {
   const [authCheckInProgress,setAuthCheckInProgress] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
-
   useEffect(()=>{
     const localToken = localStorage.getItem('0');
     const inMemoryToken = AuthAPIClient.getInstance().token;
@@ -44,10 +45,8 @@ export default function AppLayout({
     redirect('/auth/signin')
   }
   return (
-    <html lang="en">
       <NextUIProvider>
-      <body className={`${inter.className} dark`}>
-        <main className={styles.main} style={{ 
+        <main className={`${styles.main} dark`} style={{ 
             background: "url('/app-bg.jpg')",
             backgroundSize: 'cover'
           }}>
@@ -67,21 +66,18 @@ export default function AppLayout({
           </div>
           <div className={styles.center}>
             <div className={styles.leftSideBar}>
-              <BillSideBarComponent/>
+              <BillSideBarComponent selected={1}/>
             </div>
             <div className={styles.itemSelection}>
               <ItemBrowser/>
             </div>
             <div className={styles.bill}>
-              Current Bill
               {children}
             </div>
           </div>
           <div className={styles.footer}></div>
         </main>
-      </body>
-      </NextUIProvider>
 
-    </html>
+      </NextUIProvider>
   )
 }

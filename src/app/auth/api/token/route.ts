@@ -32,7 +32,6 @@ export async function POST(request: Request) {
                         }
                     })
                     const accessToken = signJWT(validOtp.employeeId);
-                    console.log(accessToken);
                     return Response.json({
                         accessToken
                     } as TokenResponse);

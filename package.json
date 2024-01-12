@@ -22,7 +22,8 @@
     "reflect-metadata": "^0.2.1",
     "short-uuid": "^4.2.2",
     "typedi": "^0.10.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.5",

@@ -56,7 +56,6 @@ model BillItem{
 model Bill {
   id String @id @unique
   items BillItem[]
-  isDineIn Boolean
   table Int?
   type BillType
   openedAt DateTime
