@@ -53,11 +53,12 @@ model BillItem{
   item Item @relation(fields: [itemId], references: [id])
   itemId Int
   billId String
-  qty Float
+  qty Int
 }
 
 model Bill {
   id String @id @unique
+  visibleId String @default("001")
   items BillItem[]
   table Int?
   type BillType
@@ -73,8 +74,8 @@ model BillPayment {
   billId String @unique
   mode PaymentMode
   total Float
-  tendered Float 
-  balance Float
+  tendered Float?
+  balance Float?
   paidAt DateTime
 }
 
@@ -98,4 +99,5 @@ enum BillStatus {
 enum PaymentMode {
   CASH
   CARD
+  BANK
 }

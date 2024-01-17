@@ -1,5 +1,6 @@
 import { Button, Checkbox, CheckboxGroup, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Select, SelectItem } from "@nextui-org/react";
 import { BillType } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { BillAPI } from "src/libs/client/api/bill";
 import { useBillStore } from "src/libs/client/store/bill.store";
@@ -8,6 +9,7 @@ const TABLES = [1, 2, 3, 4, 5, 6]
 
 export function OpenBillModal(props: { isOpen: boolean, onClose: () => void }) {
     const billStore = useBillStore(state => state);
+    const router = useRouter()
 
     // Internal State
     const [isDineIn, setIsDineIn] = useState(true);
@@ -56,6 +58,7 @@ export function OpenBillModal(props: { isOpen: boolean, onClose: () => void }) {
         if (newBillRes) {
             billStore.updateBillList([...billStore.openBills, newBillRes]);
             billStore.setCurrentBill({ ...newBillRes, items: [] });
+            router.push(`/app/bill/${newBillRes.id}`);
             setSelectedTable(undefined);
             props.onClose()
         }

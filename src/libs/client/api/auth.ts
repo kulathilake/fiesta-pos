@@ -58,7 +58,6 @@ export class AuthAPIClient {
             localStorage.setItem('0',tokenRes.accessToken);
             return tokenRes.accessToken;
         } catch (error) {
-            console.log(error);
             throw error;
         }
     }

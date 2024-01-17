@@ -36,7 +36,7 @@ export function BillSideBarComponent() {
     const getOpenBillList = () => {
         return billStore.openBills.map(b => (
             <ListboxItem key={b.id} onClick={()=>handleBillClick(b.id)}>{
-                b.type === 'DINEIN' ? `Table ${b.table} Bill` : `Takout Bill (${b.id})`
+                b.type === 'DINEIN' ? `Table ${b.table}` : `Takout (${b.id})`
             }</ListboxItem>
         ))
     }

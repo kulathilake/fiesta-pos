@@ -31,7 +31,6 @@ export class ShoutoutSMSClient implements SMSClient{
             }
 
        } catch (error) {
-            console.log(error);
             throw new Error("OTP_TRANSPORT_ERROR")
        }
     }
