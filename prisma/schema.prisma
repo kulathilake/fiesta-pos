@@ -39,6 +39,7 @@ model ItemCategory {
 model Item {
   id Int @id @default(autoincrement())
   name String
+  trans String?
   price Float
   photo String
   category ItemCategory @relation(fields: [categoryId],references: [id])
