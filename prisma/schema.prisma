@@ -29,6 +29,8 @@ model OTP {
   isUsed Boolean
   usedAt DateTime?
   expiresAt DateTime
+
+  @@index([employeeId])
 }
 
 model ItemCategory {
@@ -45,6 +47,8 @@ model Item {
   category ItemCategory @relation(fields: [categoryId],references: [id])
   categoryId Int
   billItems BillItem[]
+
+  @@index([categoryId])
 }
 
 // Bills
@@ -56,6 +60,9 @@ model BillItem{
   billId String
   qty Int
   kots KitchenTicket[]
+
+  @@index([billId])
+  @@index([itemId])
 }
 
 model KitchenTicket {
@@ -68,6 +75,9 @@ model KitchenTicket {
   qty Int
   typeOverride BillType?
   status KOTStatus @default(RECIEVED)
+
+  @@index([billId])
+  @@index([billItemId])
 }
 
 model Bill {
