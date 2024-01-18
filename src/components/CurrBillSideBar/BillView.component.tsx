@@ -1,4 +1,4 @@
-import { Button, Code, useDisclosure } from "@nextui-org/react";
+import { Button, Code, Divider, useDisclosure } from "@nextui-org/react";
 import { Bill, BillItem, BillPayment } from "@prisma/client";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -107,10 +107,10 @@ export function BillView() {
                     Total {formatNumberToCurrency(billTotal)} 
                 </div>
             </div>
-            <div className="mt-4 flex justify-evenly">
-                <Button color="success" onClick={handleCloseBillModalOpen}>💳 Pay & Close</Button>
-                <Button color="danger">🛑 Cancel</Button>
-                <Button  onClick={handlePrint} color="default">🖨️ Print</Button>
+            <div className="mt-1 flex justify-start space-x-3">
+                <Button size="sm" color="success" onClick={handleCloseBillModalOpen}>💳 Pay & Close</Button>
+                {/* <Button size="sm" color="danger">🛑 Cancel</Button> */}
+                <Button size="sm" onClick={handlePrint} color="default">🖨️ Print</Button>
             </div>
             <div>
                 <KOTList items={tickets}/>

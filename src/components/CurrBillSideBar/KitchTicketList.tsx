@@ -5,7 +5,7 @@ import { KOTWithItems } from "src/common/types/api/bill/kot.types";
 export function KOTList(props: { items: KOTWithItems[] }) {
     return (
         <>
-            <div className="my-3 sticky flex flex-row justify-between items-center ">
+            <div className=" sticky flex flex-row justify-between items-center ">
                 <div>
                     <h4>Kitchen Order Tickets {`(${props.items.length})`}</h4>
                     <small>Maximize</small>

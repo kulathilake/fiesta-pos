@@ -67,14 +67,14 @@ export default function AppLayout({
               priority
             />
           </div>
-          <div className={styles.center}>
+          <div className={`${styles.center}`}>
             <div className={styles.leftSideBar}>
               <BillSideBarComponent/>
             </div>
             <div className={styles.itemSelection}>
               <ItemBrowser/>
             </div>
-            <div className={`${styles.bill}`}>
+            <div className={`${styles.bill} py-4`}>
               {children}
             </div>
           </div>

@@ -6,7 +6,7 @@ import { ItemCard } from "./ItemCard.component";
 import { useBillStore } from "src/libs/client/store/bill.store";
 import { BillAPI } from "src/libs/client/api/bill";
 import { BillWithItems } from "src/common/types/api/bill/bill.types";
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, useDisclosure } from "@nextui-org/react";
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Spinner, useDisclosure } from "@nextui-org/react";
 import Image from "next/image";
 
 /**
@@ -19,6 +19,7 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
     const [items, setItems] = useState<Item[]>([]);
     const [clickedItem, setClickedItem] = useState<Item>();
     const [clickedItemQty, setClickedItemQty] = useState(1);
+    const [loading,setIsLoading] = useState(true);
 
     const handleItemAdd = () => {
         if (billStore.currBill && clickedItem) {
@@ -54,13 +55,18 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
     }
 
     useEffect(() => {
+        setIsLoading(true)
         ItemAPI.getCategoryItems(props.categoryId)
             .then((res: GetCategoryItemsResponse) => {
                 setItems(res.items)
+                setIsLoading(false);
             })
     }, []);
 
     const getItemCards = () => {
+        if(items?.length === 0) {
+           return <p>No items under this category</p>
+        }
         return items?.map(i => (
             <ItemCard key={i.id} onClick={handleItemClick} item={i} />
         ))
@@ -69,7 +75,7 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
     return (
         <>
             <div className="flex flex-wrap justify-start overflow-y-scroll max-h-unit-8xl">
-                {getItemCards()}
+                {!loading ? getItemCards(): <Spinner label="Loading Items"/>}
             </div>
             {(clickedItem && billStore.currBill) &&
                 // Add Item Modal

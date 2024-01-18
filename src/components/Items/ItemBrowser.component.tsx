@@ -2,7 +2,7 @@
  * Item Browser Component
  */
 
-import { Tab, Tabs } from "@nextui-org/react";
+import { Spinner, Tab, Tabs } from "@nextui-org/react";
 import { useEffect, useState } from "react"
 import { GetItemCatgoriesResponse } from "src/common/types/api/items/item.types";
 import { ItemAPI } from "src/libs/client/api/item"
@@ -12,7 +12,6 @@ import { CategoryItemBrowser } from "./CategoryItemBrowser.component";
 import { useBillStore } from "src/libs/client/store/bill.store";
 
 export function ItemBrowser() {
-    const billStore = useBillStore(state=>state);
     const [categories,setCategories] = useState<{id:number, label:string, section:string}[]>([]);
     const [sections,setSections] = useState<string[]>([]);
 
@@ -48,10 +47,13 @@ export function ItemBrowser() {
     }
 
     return (
-        <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col justify-center">
+            {!!categories.length ?
             <Tabs color="primary" variant="solid">
                 {getSectionTabs()}
-            </Tabs>
+            </Tabs>:
+            <Spinner label="Loading Categories"/>
+            }
         </div>
     )
 }
