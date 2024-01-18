@@ -26,6 +26,7 @@ export function CloseBillModal(props: {bill:BillWithItems, total:number, isOpen:
             BillAPI.getOpenBills()
             .then((res: BillWithItems[]) => {
                 billStore.updateBillList(res);
+                billStore.setCurrentBill(null);
                 router.push('/app')
             })
             .catch(e => {

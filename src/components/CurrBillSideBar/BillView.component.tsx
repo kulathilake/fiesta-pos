@@ -9,10 +9,14 @@ import { BillItemModal } from "./BillItemModal";
 import { BillItemWithItem } from "src/common/types/api/bill/bill.types";
 import { CloseBillModal } from "./CloseBillModal";
 import { PrintClient } from "src/libs/client/api/print";
+import { useTicketStore } from "src/libs/client/store/kot.store";
+import { KOTList } from "./KitchTicketList";
 
 export function BillView() {
 
     const bill = useBillStore(state => state.currBill);
+    const tickets = useTicketStore(state=>state.currBillTickets);
+
     const {isOpen: isBillUpdateOpen,onClose: onBillUpdateClose,onOpen: onBillUpdateOpen} = useDisclosure();
     const {isOpen: isCloseBillOpen, onClose: onCloseBillClose, onOpen: onCloseBillOpen} = useDisclosure();
 
@@ -69,7 +73,6 @@ export function BillView() {
                 </div>
                 {/* Total Col. */}
                 <div className="w-20 mr-4">
-
                     {formatNumberToCurrency(i.qty * i.item.price)}
                 </div>
 
@@ -109,6 +112,10 @@ export function BillView() {
                 <Button color="danger">🛑 Cancel</Button>
                 <Button  onClick={handlePrint} color="default">🖨️ Print</Button>
             </div>
+            <div>
+                <KOTList items={tickets}/>
+            </div>
+     
         </div>
         {billItem && <BillItemModal item={billItem} isOpen={isBillUpdateOpen} onClose={handleUpdateModalClose}/>}
         <CloseBillModal 

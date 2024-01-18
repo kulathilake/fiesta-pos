@@ -54,6 +54,19 @@ model BillItem{
   itemId Int
   billId String
   qty Int
+  kots KitchenTicket[]
+}
+
+model KitchenTicket {
+  id Int @id @default(autoincrement())
+  bill Bill @relation(fields: [billId],references: [id])
+  billId String
+  billItem BillItem @relation(fields: [billItemId], references: [id])
+  billItemId Int
+  issuedAt DateTime
+  qty Int
+  typeOverride BillType?
+  status KOTStatus @default(RECIEVED)
 }
 
 model Bill {
@@ -66,6 +79,7 @@ model Bill {
   closedAt DateTime?
   payment BillPayment?
   status BillStatus
+  tickets KitchenTicket[]
 }
 
 model BillPayment {
@@ -100,4 +114,11 @@ enum PaymentMode {
   CASH
   CARD
   BANK
+}
+
+enum KOTStatus {
+  RECIEVED
+  TO_KITCHEN
+  PREPARING
+  DISPATCHED
 }

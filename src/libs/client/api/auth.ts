@@ -69,6 +69,9 @@ export class AuthAPIClient {
                     'Authorization': token
                 }
             }));
+            if(res){
+                this.getInstance()._token = token;
+            }
             return !!res;
         } catch (error) {
             return false;

@@ -74,7 +74,7 @@ export default function AppLayout({
             <div className={styles.itemSelection}>
               <ItemBrowser/>
             </div>
-            <div className={styles.bill}>
+            <div className={`${styles.bill}`}>
               {children}
             </div>
           </div>

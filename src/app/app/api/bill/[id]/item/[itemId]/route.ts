@@ -6,7 +6,8 @@ import { PrismaClient } from "@prisma/client";
 import { UPDATE_BILL_ITEM_ERROR } from "src/common/errors/billItem.errors";
 import { UpdateBillItemBody, UpdateBillItemValidator } from "src/common/types/api/bill/billItem.types";
 
-export async function PUT(request: Request) {
+export async function PUT(request: Request, {params}: {params:{id:string}}) {
+    const {id:billId} = params;
     try {
         const body = await request.json() as UpdateBillItemBody;
         UpdateBillItemValidator.parse(body);
@@ -19,18 +20,36 @@ export async function PUT(request: Request) {
             });
             return Response.json(deleteRes);
         }else {
+            const billItem = await db.billItem.findFirstOrThrow({
+                where: {
+                    id: body.billItemId
+                }
+            });
+
+            if((billItem.qty < body.qty) ) {
+                // Should create a new KOT.
+                await db.kitchenTicket.create({
+                    data: {
+                        billItemId: billItem.id,
+                        qty: body.qty - billItem.qty,
+                        billId: billId,
+                        issuedAt: new Date()
+                    }
+                })
+            }
             const updateRes = await db.billItem.update({
                 data: {
                     qty: body.qty
                 },
                 where:{
-                    id: body.billItemId
+                    id: body.billItemId,
                 }
             });
 
             return Response.json(updateRes)
         }
     } catch (error) {
+        console.log(error)
         return Response.json(UPDATE_BILL_ITEM_ERROR.INVALID_PAYLOAD_ERROR, {status:400})
     }
 }

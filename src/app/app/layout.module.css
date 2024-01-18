@@ -27,7 +27,7 @@
 }
 
 .leftSideBar {
-    width: 12%;
+    width: 10%;
     height: 100%;
     padding: 1rem;
     background-color: rgb(0, 0, 0);
@@ -40,7 +40,7 @@
 }
 
 .bill {
-    padding: 1rem;
+    margin: 0 1rem 0 0;
     width: 28%
 }
 

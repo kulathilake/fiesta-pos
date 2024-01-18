@@ -92,9 +92,10 @@ async function main(){
     });
 
     //Items
-    await Promise.all(items.map((item,i)=>(
-        db.item.upsert({
-            where: {id: i},
+    await Promise.all(items.map((item,i)=>{
+        console.log({item,i})
+        return db.item.upsert({
+            where: {id: i+1},
             update: {},
             create: {
                 name: item.name,
@@ -103,7 +104,7 @@ async function main(){
                 categoryId: item.category
             }
         })
-    ))).catch(console.log)
+    })).catch(console.log)
 
     const pins = {
         100: generateRandomPIN(),
