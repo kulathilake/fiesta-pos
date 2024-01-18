@@ -10,5 +10,7 @@ export function getSectionLabel(section: Section) {
             return "Indian Cuisine";
         case Section.JUICE_BAR:
             return "Juice Bar"
+        case Section.CHILLER:
+            return "Chilled Items"
     }
 }
