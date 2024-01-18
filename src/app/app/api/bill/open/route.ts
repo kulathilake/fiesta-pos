@@ -4,6 +4,7 @@
 
 import { BillStatus, PrismaClient } from "@prisma/client";
 import { OPEN_BILL_ERROR } from "src/common/errors/bill.errors";
+export const dynamic = "force-dynamic";
 
 export async function GET(){
     try {

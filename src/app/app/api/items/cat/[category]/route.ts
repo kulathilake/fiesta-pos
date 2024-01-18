@@ -4,6 +4,8 @@
 
 import { PrismaClient } from "@prisma/client"
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request, { params }: { params: { category: string } }) {
     try {
         const db = new PrismaClient();
