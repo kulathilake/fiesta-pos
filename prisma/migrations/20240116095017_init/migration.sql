@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `billitem` ADD COLUMN `portion` ENUM('REGULAR', 'LARGE') NOT NULL DEFAULT 'REGULAR';
