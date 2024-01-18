@@ -1,3 +1,5 @@
+[![Deploy database](https://github.com/kulathilake/fiesta-pos-app/actions/workflows/main.yml/badge.svg)](https://github.com/kulathilake/fiesta-pos-app/actions/workflows/main.yml)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
