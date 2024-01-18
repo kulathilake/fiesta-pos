@@ -4,6 +4,10 @@ const nextConfig = {
         remotePatterns: [
           {
             protocol: 'https',
+            hostname: 'i.ibb.co',
+          },
+          {
+            protocol: 'https',
             hostname: 'encrypted-tbn3.gstatic.com',
           },
           {
