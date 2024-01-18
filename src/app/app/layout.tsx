@@ -55,8 +55,8 @@ export default function AppLayout({
           }}>
           <div className={styles.header}>
             <div>
-              <Button  className="mx-unit-1 bg-black text-color-white">🔒 Lock</Button>
-              <Button className="mx-unit-1 bg-black text-color-white">↩️ Logout</Button>
+              <Button  className="mx-unit-1 bg-slate-500 text-color-white">🔒 Lock</Button>
+              <Button className="mx-unit-1 bg-slate-500 text-color-white">↩️ Logout</Button>
             </div>
             <Image
               src="/fiesta.png"
