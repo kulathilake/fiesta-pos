@@ -99,6 +99,7 @@ enum Section {
   BBQ_N_GRILL
   INDIAN_CUISINE
   JUICE_BAR
+  CHILLER
 }
 enum BillType {
   DINEIN
