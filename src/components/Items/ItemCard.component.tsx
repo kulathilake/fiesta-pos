@@ -18,9 +18,9 @@ export function ItemCard(props: {onClick:(item:Item)=>void,item:Item}) {
                     // height={270}
                     fill={true}
                 />
-                <p className=" absolute bottom-0 text-xs uppercase font-bold">{props.item.name} - {props.item.id} </p>
-            </CardBody>
+                </CardBody>
             <CardFooter>
+                <p className=" absolute bottom-0 text-xs uppercase font-bold">{props.item.name} - {props.item.id} </p>
                 <h4 className="font-bold text-large">{formatNumberToCurrency(props.item.price)}</h4>
             </CardFooter>
         </Card>
