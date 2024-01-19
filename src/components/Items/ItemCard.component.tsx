@@ -5,9 +5,10 @@ import { formatNumberToCurrency } from "src/libs/utils/currency";
 
 export function ItemCard(props: {onClick:(item:Item)=>void,item:Item}) {
     return (
-        <Card className="py-4 m-2 max-w-60" isPressable onClick={()=>props.onClick(props.item)}>
-            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start min-h-20">
+        <Card className="py-4 m-2 w-60" isPressable onClick={()=>props.onClick(props.item)}>
+            <CardHeader className="pb-0 py-2 px-4 flex-col items-start min-h-20">
                 <h4 className="font-bold text-large">{props.item.trans}</h4>
+                <p className=" capitalize absolute bottom-0 text-xs font-bold">{props.item.name} - {props.item.id} </p>
             </CardHeader>
             <CardBody className="overflow-visible py-2 h-40">
                 <Image
@@ -20,7 +21,6 @@ export function ItemCard(props: {onClick:(item:Item)=>void,item:Item}) {
                 />
                 </CardBody>
             <CardFooter>
-                <p className=" absolute bottom-0 text-xs uppercase font-bold">{props.item.name} - {props.item.id} </p>
                 <h4 className="font-bold text-large">{formatNumberToCurrency(props.item.price)}</h4>
             </CardFooter>
         </Card>
