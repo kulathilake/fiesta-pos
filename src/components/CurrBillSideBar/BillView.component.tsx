@@ -83,6 +83,7 @@ export function BillView() {
     if (bill) return (
         <>
         <div>
+            <h4>{bill.visibleId}</h4>
             <div
             ref={recieptRef} 
             className="relative flex flex-col justify-start items-center rounded-lg pt-4 bg-white min-h-72

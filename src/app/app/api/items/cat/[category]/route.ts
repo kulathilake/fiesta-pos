@@ -12,6 +12,9 @@ export async function GET(request: Request, { params }: { params: { category: st
         const itemRes = await db.item.findMany({
             where: {
                 categoryId: Number(params.category)
+            },
+            orderBy: {
+                name: "asc"
             }
         });
         return Response.json({items:itemRes})

@@ -74,7 +74,7 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
 
     return (
         <>
-            <div className="flex flex-wrap justify-start overflow-y-scroll max-h-unit-8xl">
+            <div className="flex flex-wrap justify-start overflow-y-scroll max-h-unit-9xl">
                 {!loading ? getItemCards(): <Spinner label="Loading Items"/>}
             </div>
             {(clickedItem && billStore.currBill) &&

@@ -8,9 +8,10 @@ export function ItemCard(props: {onClick:(item:Item)=>void,item:Item}) {
         <Card className="py-4 m-2 w-60" isPressable onClick={()=>props.onClick(props.item)}>
             <CardHeader className="pb-0 py-2 px-4 flex-col items-start min-h-20">
                 <h4 className="font-bold text-large">{props.item.trans}</h4>
-                <p className=" capitalize absolute bottom-0 text-xs font-bold">{props.item.name} - {props.item.id} </p>
             </CardHeader>
             <CardBody className="overflow-visible py-2 h-40">
+            <p className=" capitalize absolute bottom-0 text-xs font-bold">{props.item.name} - {props.item.id} </p>
+                
                 <Image
                     alt="Card background"
                     className="object-cover rounded-xl"
