@@ -54,33 +54,7 @@ export default function AppLayout({
         background: "url('/app-bg.jpg')",
         backgroundSize: 'cover'
       }}>
-        <div className={styles.header}>
-          <div>
-            <Button className="mx-unit-1 bg-slate-500 text-color-white">🔒 Lock</Button>
-          </div>
-          <Image
-            src="/fiesta.png"
-            alt="Fiesta Logo"
-            className={styles.Logo}
-            width={138.7}
-            height={71.9}
-            priority
-          />
-        </div>
-        <div className={`${styles.center}`}>
-          <div className={styles.leftSideBar}>
-            <BillSideBarComponent />
-          </div>
-          <div className={styles.itemSelection}>
-            <ItemBrowser />
-          </div>
-          <div className={`${styles.bill} py-4`}>
-            {children}
-          </div>
-        </div>
-        <div className={styles.footer}></div>
       </main>
-
     </NextUIProvider>
   )
 }
