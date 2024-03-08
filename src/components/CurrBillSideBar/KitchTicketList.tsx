@@ -6,19 +6,21 @@ import { BillItemWithItem } from "src/common/types/api/bill/bill.types";
 import { KOTWithItems } from "src/common/types/api/bill/kot.types";
 import { KotClient } from "src/libs/client/api/kot";
 import { useTicketStore } from "src/libs/client/store/kot.store";
+import { PrintClient } from 'src/libs/client/api/print';
 
 export function KOTList(props: { items: KOTWithItems[], isOpen: boolean, onClose: () => void }) {
     const ticketStore = useTicketStore(state => state);
     const [isPrinting,setIsPrinting] = useState(false);
 
-    const handleKOTPrint = (billId: number, kotId: number) => {
+    const handleKOTPrint = (billId: number, kot: KOTWithItems) => {
         setIsPrinting(true);
-        KotClient.updateKOTStatus(billId, kotId, KOTStatus.PREPARING)
+        KotClient.updateKOTStatus(billId, kot.id, KOTStatus.PREPARING)
             .then((res) => {
                 KotClient.getCurrentBillKots(`${billId}`)
                     .then(res => {
                         ticketStore.setCurrentBillTickets(res)
-                    })
+                    });
+                PrintClient.printKot(kot)
             })
             .catch(error => {
 
@@ -57,7 +59,7 @@ export function KOTList(props: { items: KOTWithItems[], isOpen: boolean, onClose
                                             {i.status === KOTStatus.RECIEVED && 
                                                 <Button 
                                                     color="success" 
-                                                    onClick={() => { handleKOTPrint(+i.billId, i.id) }}
+                                                    onClick={() => { handleKOTPrint(+i.billId, i) }}
                                                     endContent={isPrinting?<Spinner/>:null}
                                                 >Print</Button>}
                                         </>
