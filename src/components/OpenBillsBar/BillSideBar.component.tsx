@@ -28,7 +28,7 @@ export function BillSideBarComponent() {
     const handleBillClick = (billId: string) => {
         const bill = billStore.openBills.find(b=>b.id===billId);
         if(bill){
-            router.push(`/app/bill/${billId}`);
+            router.push(`/pos/bill/${billId}`);
             billStore.setCurrentBill(bill);
         }
     }

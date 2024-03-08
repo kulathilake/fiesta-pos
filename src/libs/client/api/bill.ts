@@ -11,7 +11,7 @@ import { CreateBillItemBody, UpdateBillItemBody } from "src/common/types/api/bil
 export class BillAPI {
     
     static async openNewBill(type:BillType,table:number|null): Promise<any>{
-        return (await axios.post('/app/api/bill',{
+        return (await axios.post('/pos/api/bill',{
             type,
             table
         },{
@@ -22,7 +22,7 @@ export class BillAPI {
     }
 
     static async getOpenBills():Promise<(BillWithItems)[]> {
-        return (await axios.get('/app/api/bill/open',{
+        return (await axios.get('/pos/api/bill/open',{
             headers: {
                 Authorization: AuthAPIClient.getInstance().token
             }
@@ -30,7 +30,7 @@ export class BillAPI {
     }
 
     static async addBillItem(billId: string, itemId:number, qty: number): Promise<BillWithItems> {
-        return (await axios.post(`/app/api/bill/${billId}/item`,{
+        return (await axios.post(`/pos/api/bill/${billId}/item`,{
             billId,
             itemId,
             qty,
@@ -45,7 +45,7 @@ export class BillAPI {
         const token = AuthAPIClient.getInstance().token
         console.log(AuthAPIClient.getInstance())
         console.log(token)
-        return (await axios.put(`/app/api/bill/${billId}/item/${billItemId}`,{
+        return (await axios.put(`/pos/api/bill/${billId}/item/${billItemId}`,{
             billItemId,
             qty: newQty,
             isDeleted
@@ -57,7 +57,7 @@ export class BillAPI {
     }
 
     static async closeBill(data: CloseBillReqBody):Promise<{bill:BillWithItems, payment:BillPayment}>{
-        return (await axios.put(`/app/api/bill/${data.billId}/close`,{
+        return (await axios.put(`/pos/api/bill/${data.billId}/close`,{
             ...data,   
         })).data
     }

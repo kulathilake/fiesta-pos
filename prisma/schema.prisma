@@ -55,19 +55,19 @@ model BillItem{
   itemId Int
   billId String
   qty Int
-  kots KitchenTicket[]
+  kot KitchenTicket @relation(fields: [kotId], references: [id])
+  kotId Int
 }
 
 model KitchenTicket {
   id Int @id @default(autoincrement())
   bill Bill @relation(fields: [billId],references: [id])
   billId String
-  billItem BillItem @relation(fields: [billItemId], references: [id])
-  billItemId Int
   issuedAt DateTime
-  qty Int
+  updatedAt DateTime
   typeOverride BillType?
   status KOTStatus @default(RECIEVED)
+  items BillItem[]
 }
 
 model Bill {

@@ -8,10 +8,10 @@ import { GetCategoryItemsResponse, GetItemCatgoriesResponse } from "src/common/t
 export class ItemAPI {
     
     static async getItemCategories(): Promise<GetItemCatgoriesResponse>{
-        return (await axios.get('/app/api/items/categories')).data;
+        return (await axios.get('/pos/api/items/categories')).data;
     }
 
     static async getCategoryItems(category:number):Promise<GetCategoryItemsResponse> {
-        return (await axios.get(`/app/api/items/cat/${category}/`)).data
+        return (await axios.get(`/pos/api/items/cat/${category}/`)).data
     }
 }

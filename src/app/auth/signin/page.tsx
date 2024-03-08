@@ -4,58 +4,31 @@ import { AuthAPIClient } from "src/libs/client/api/auth";
 import styles from "./page.module.css";
 import Link from 'next/link';
 import { FormEventHandler, useEffect, useState } from 'react';
-import { OTPRequestResponse } from 'src/common/types/api/auth/auth.types';
 import { OTP_ERRORS, TOKEN_ISSUE_ERRORS } from 'src/common/errors/auth.errors';
 import { redirect } from 'next/navigation';
 
 export default function SignIn() {
     const [isAuthorized, setIsAuthorized] = useState(false);
-    const [otpReqRes, setOtpReqRes] = useState<OTPRequestResponse>();
 
     useEffect(()=>{
         if(isAuthorized){
-            redirect('/app')
+            redirect('/pos')
         }
     },[isAuthorized])
-    const handleRequestOtpClick: FormEventHandler<HTMLFormElement> = async (e) => {
-        e.preventDefault();
-        const data = new FormData(e.target as HTMLFormElement);
-        const id = Number(data.get('employee-id'));
-        const mobile = Number("94" + data.get('employee-mobile'));
-        const pin = data.get('employee-pin') as string;
-        try {
-            const otpRequest = (await AuthAPIClient.requestOtp(id, mobile, pin));
-            setOtpReqRes(otpRequest);
-        } catch (error) {
-            switch ((error as any).message as OTP_ERRORS) {
-                case OTP_ERRORS.INVALID_EMPID_PIN_MOBILE_COMB_ERROR:
-                    alert("Invalid Employee PIN or Mobile Number");
-                    break;
-                case OTP_ERRORS.INVALID_PAYLOAD_ERROR:
-                case OTP_ERRORS.TRANSPORT_ERROR:
-                default:
-                    alert("Something went wrong!");
-                    break;
-            }
-        }
-    }
 
     const handleTokenRequestClick: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         const data = new FormData(e.target as HTMLFormElement);
-        const otp = Number(data.get('otp'))
+        const id = Number(data.get('employee-id'));
+        const pin = data.get('employee-pin') as string;
         try {
-            if(otpReqRes){
-                const tokenReq = (await AuthAPIClient.requestToken(otpReqRes?.request_id,otp));
-                setIsAuthorized(!!tokenReq)
-            }
+            
+            const tokenReq = (await AuthAPIClient.requestToken(id,pin));
+            setIsAuthorized(!!tokenReq)
         } catch (error) {
             switch((error as any).message as TOKEN_ISSUE_ERRORS){
-                case TOKEN_ISSUE_ERRORS.INVALID_OTP_ERROR:
-                    alert("Invalid OTP");
-                    break;
-                case TOKEN_ISSUE_ERRORS.OTP_EXPIRED_ERROR:
-                    alert("OTP Expired");
+                case TOKEN_ISSUE_ERRORS.INVALID_PIN_ERROR:
+                    alert("Invalid PIN");
                     break;
                 case TOKEN_ISSUE_ERRORS.INVALID_PAYLOAD_ERROR:
                 default:
@@ -68,7 +41,7 @@ export default function SignIn() {
     return (
         <main className={styles.main}>
             <video autoPlay muted loop className={styles.video}>
-                <source src="/bg.mp4" type="video/mp4" />
+                <source src="/bg.mp4" type="/video/mp4" />
                 Your browser does not support HTML5 video.
             </video>
             <div className={styles.description}>
@@ -95,8 +68,7 @@ export default function SignIn() {
             {/* Sign in forms */}
             <div className={styles.center}>
                 <h1>Sign in to Fiesta POS</h1>
-                {!!!otpReqRes ?
-                    <form id="sign-form-1" onSubmit={handleRequestOtpClick}>
+                    <form id="sign-form-1" onSubmit={handleTokenRequestClick}>
                         <label htmlFor='employee-id'>Employee ID</label>
                         <input className={styles.input} type="number" name="employee-id" required />
                         <label htmlFor='employee-pin'>Employee PIN</label>
@@ -104,14 +76,7 @@ export default function SignIn() {
                         <label htmlFor='employee-mobile'>Employee Mobile Number</label>
                         <input className={styles.input} type='tel' name="employee-mobile" required />
                         <button className={styles.button} type="submit">Sign in</button>
-                    </form> :
-                    <form id="opt-form" onSubmit={handleTokenRequestClick}>
-                        <label htmlFor='otp'>OTP</label>
-                        <input className={styles.input} type='number' name="otp" required/>
-                        <button className={styles.button} type="submit">Verify</button>
-                    </form>
-                }
-
+                    </form> 
             </div>
         </main>
     )

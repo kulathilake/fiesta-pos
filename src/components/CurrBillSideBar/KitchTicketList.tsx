@@ -7,8 +7,7 @@ export function KOTList(props: { items: KOTWithItems[] }) {
         <>
             <div className=" sticky flex flex-row justify-between items-center ">
                 <div>
-                    <h4>Kitchen Order Tickets {`(${props.items.length})`}</h4>
-                    <small>Maximize</small>
+                    <h4>Pending Kitchen Order Tickets {`(${props.items.length})`}</h4>
                 </div>
 
                 <Button>Send all to Kitchen</Button>

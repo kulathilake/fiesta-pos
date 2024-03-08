@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { TOKEN_ISSUE_ERRORS } from "src/common/errors/auth.errors";
 import { TokenRequestBody, TokenRequestValidator, TokenResponse } from "src/common/types/api/auth/auth.types";
 import { signJWT } from "src/libs/server/jwt";
+import { hashPin } from "src/libs/utils/crypto";
 
 /**
  * Token Issuing Endpoint
@@ -12,34 +13,20 @@ export async function POST(request: Request) {
         const db = new PrismaClient();
         TokenRequestValidator.parse(body);
         try {
-            const validOtp = await db.oTP.findUnique({
+            const employee = await db.employee.findUnique({
                 where: {
-                    requestId: body.request_id,
-                    otp: body.otp,
-                    isUsed: false,
+                  id: body.employee_id,
+                  hashedPin: hashPin(body.pin)
                 }
-            });
+              })
 
-            if(validOtp){
-                if(+validOtp.expiresAt > Date.now()) {
-                    await db.oTP.update({
-                        data: {
-                            isUsed: true,
-                            usedAt: new Date(),
-                        },
-                        where: {
-                            requestId: validOtp.requestId
-                        }
-                    })
-                    const accessToken = signJWT(validOtp.employeeId);
-                    return Response.json({
-                        accessToken
-                    } as TokenResponse);
-                }else {
-                    return Response.json(TOKEN_ISSUE_ERRORS.OTP_EXPIRED_ERROR, {status:401});
-                }
+            if(employee){
+                const accessToken = signJWT(employee.id);
+                return Response.json({
+                    accessToken
+                } as TokenResponse);
             }else{
-                return Response.json(TOKEN_ISSUE_ERRORS.INVALID_OTP_ERROR,{status:401});
+                return Response.json(TOKEN_ISSUE_ERRORS.INVALID_PIN_ERROR,{status:401});
             }
         } catch (error) {
             console.log(error);

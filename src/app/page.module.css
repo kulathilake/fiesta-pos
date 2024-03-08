@@ -1,10 +1,12 @@
 .main {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
+  z-index: 2;
 }
 
 .description {
@@ -116,7 +118,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  z-index: -1;
+  z-index: 1;
   filter: brightness(20%);
 }
 .logo {

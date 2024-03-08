@@ -4,7 +4,7 @@
  */
 
 import axios from "axios";
-import { OTPRequestResponse, TokenResponse } from "src/common/types/api/auth/auth.types";
+import { TokenResponse } from "src/common/types/api/auth/auth.types";
 
 export class AuthAPIClient {
     private static instance: AuthAPIClient;
@@ -18,26 +18,7 @@ export class AuthAPIClient {
             return this.instance;
         }
     }
-    /**
-     * Creates a POST request to 'auth/api/otp'
-     * @param employee_id 
-     * @throws otp_request_error
-     */
-    static async requestOtp(
-        employee_id:number,
-        mobile_number:number,
-        pin: string
-        ):Promise<OTPRequestResponse> {
-        try {
-            return (await axios.post('/auth/api/otp',{
-                employee_id,
-                mobile_number,
-                pin
-            })).data   
-        } catch (error) {
-            throw error;
-        }
-    }
+    
     /**
      * requests a verification of a user provided OTP
      * against a request id and obtains an access token.
@@ -45,13 +26,13 @@ export class AuthAPIClient {
      * @param otp 
      */
     static async requestToken(
-        request_id: string,
-        otp: number
+        employee_id: number,
+        pin: string
     ){
         try {
             const tokenRes =  (await axios.post('/auth/api/token',{
-                request_id,
-                otp
+                employee_id,
+                pin
             })).data as TokenResponse
 
             AuthAPIClient.getInstance()._token = tokenRes.accessToken;

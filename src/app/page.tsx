@@ -22,12 +22,11 @@ export default function Home() {
   },[]);
   
   if(isAuthorized){
-    redirect('/app');
+    redirect('/pos');
   }
   return (
     <>
-      <video autoPlay muted loop className={styles.video}>
-        <source src="bg.mp4" type="video/mp4" />
+      <video src='bg.mp4' autoPlay muted loop className={styles.video}>
         Your browser does not support HTML5 video.
       </video>
       <main className={styles.main}>

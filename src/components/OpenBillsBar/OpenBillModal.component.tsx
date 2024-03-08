@@ -58,7 +58,7 @@ export function OpenBillModal(props: { isOpen: boolean, onClose: () => void }) {
         if (newBillRes) {
             billStore.updateBillList([...billStore.openBills, newBillRes]);
             billStore.setCurrentBill({ ...newBillRes, items: [] });
-            router.push(`/app/bill/${newBillRes.id}`);
+            router.push(`/pos/bill/${newBillRes.id}`);
             setSelectedTable(undefined);
             props.onClose()
         }
