@@ -73,8 +73,6 @@ export default function SignIn() {
                         <input className={styles.input} type="number" name="employee-id" required />
                         <label htmlFor='employee-pin'>Employee PIN</label>
                         <input className={styles.input} type='number' name="employee-pin" required />
-                        <label htmlFor='employee-mobile'>Employee Mobile Number</label>
-                        <input className={styles.input} type='tel' name="employee-mobile" required />
                         <button className={styles.button} type="submit">Sign in</button>
                     </form> 
             </div>
