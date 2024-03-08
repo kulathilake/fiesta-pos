@@ -6,9 +6,10 @@ import { BillSideBarComponent } from "src/components/OpenBillsBar/BillSideBar.co
 import { useEffect, useState } from "react";
 import { AuthAPIClient } from "src/libs/client/api/auth";
 import { redirect } from "next/navigation";
-import { Button, NextUIProvider } from "@nextui-org/react";
+import { Button, NextUIProvider, useDisclosure } from "@nextui-org/react";
 import { ItemBrowser } from "src/components/Items/ItemBrowser.component";
 import { LoadingScreen } from "src/components/Screens/LoadingScreen";
+import { NewItemModal } from "src/components/Items/NewItemModal";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,6 +20,7 @@ export default function AppLayout({
   children: React.ReactNode,
   params: any
 }) {
+  const {isOpen: isNewItemOpen, onClose: newItemOnClose, onOpen: newItemOnOpen} = useDisclosure();
   const [authCheckInProgress, setAuthCheckInProgress] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -57,6 +59,8 @@ export default function AppLayout({
         <div className={styles.header}>
           <div>
             <Button className="mx-unit-1 bg-slate-500 text-color-white">🔒 Lock</Button>
+            <Button onClick={newItemOnOpen}>🆕 New Menu Item</Button>
+            <NewItemModal isOpen={isNewItemOpen} onClose={newItemOnClose}/>
           </div>
           <Image
             src="/fiesta.png"
