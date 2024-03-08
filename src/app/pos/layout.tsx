@@ -18,16 +18,16 @@ export default function AppLayout({
   children: React.ReactNode,
   params: any
 }) {
-  const [authCheckInProgress,setAuthCheckInProgress] = useState(true);
+  const [authCheckInProgress, setAuthCheckInProgress] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     const localToken = localStorage.getItem('0');
     const inMemoryToken = AuthAPIClient.getInstance().token;
-    if(inMemoryToken) {
+    if (inMemoryToken) {
       setIsAuthorized(true);
       setAuthCheckInProgress(false);
-    }else if (localToken) {
+    } else if (localToken) {
       AuthAPIClient.verifyLocalToken(localToken)
         .then(isValid => {
           setIsAuthorized(isValid);
@@ -38,49 +38,48 @@ export default function AppLayout({
       setAuthCheckInProgress(false);
     }
 
-  },[]);
+  }, []);
 
 
-  if(authCheckInProgress && !isAuthorized) {
+  if (authCheckInProgress && !isAuthorized) {
     return <p>loading...</p>
   }
-  if(!authCheckInProgress && !isAuthorized) {
+  if (!authCheckInProgress && !isAuthorized) {
     redirect('/auth/signin')
   }
   return (
-      <NextUIProvider>
-        <main className={`${styles.main} dark`} style={{ 
-            background: "url('/app-bg.jpg')",
-            backgroundSize: 'cover'
-          }}>
-          <div className={styles.header}>
-            <div>
-              <Button  className="mx-unit-1 bg-slate-500 text-color-white">🔒 Lock</Button>
-              <Button className="mx-unit-1 bg-slate-500 text-color-white">↩️ Logout</Button>
-            </div>
-            <Image
-              src="/fiesta.png"
-              alt="Fiesta Logo"
-              className={styles.Logo}
-              width={138.7}
-              height={71.9}
-              priority
-            />
+    <NextUIProvider>
+      <main className={`${styles.main} dark`} style={{
+        background: "url('/app-bg.jpg')",
+        backgroundSize: 'cover'
+      }}>
+        <div className={styles.header}>
+          <div>
+            <Button className="mx-unit-1 bg-slate-500 text-color-white">🔒 Lock</Button>
           </div>
-          <div className={`${styles.center}`}>
-            <div className={styles.leftSideBar}>
-              <BillSideBarComponent/>
-            </div>
-            <div className={styles.itemSelection}>
-              <ItemBrowser/>
-            </div>
-            <div className={`${styles.bill} py-4`}>
-              {children}
-            </div>
+          <Image
+            src="/fiesta.png"
+            alt="Fiesta Logo"
+            className={styles.Logo}
+            width={138.7}
+            height={71.9}
+            priority
+          />
+        </div>
+        <div className={`${styles.center}`}>
+          <div className={styles.leftSideBar}>
+            <BillSideBarComponent />
           </div>
-          <div className={styles.footer}></div>
-        </main>
+          <div className={styles.itemSelection}>
+            <ItemBrowser />
+          </div>
+          <div className={`${styles.bill} py-4`}>
+            {children}
+          </div>
+        </div>
+        <div className={styles.footer}></div>
+      </main>
 
-      </NextUIProvider>
+    </NextUIProvider>
   )
 }

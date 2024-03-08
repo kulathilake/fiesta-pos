@@ -7,5 +7,6 @@ export const KOTChangeStatusValidator = z.object({
     status:  z.enum([KOTStatus.PREPARING, KOTStatus.PREPARING]).optional(),
 })
 
-export type KOTWithItems = KitchenTicket & {kotItems: KitchenTicketItem & {billItem: BillItem & {item: Item}}}
+export type KOTWithItems = KitchenTicket & {kotItems: KOIItem[]}
+export type KOIItem = KitchenTicketItem & {billItem: BillItem & {item: Item}}
 export type KOTChangeStatusRequestBody = z.infer<typeof KOTChangeStatusValidator>;

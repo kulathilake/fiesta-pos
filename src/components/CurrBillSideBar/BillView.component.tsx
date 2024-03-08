@@ -10,7 +10,7 @@ import { BillItemWithItem } from "src/common/types/api/bill/bill.types";
 import { CloseBillModal } from "./CloseBillModal";
 import { PrintClient } from "src/libs/client/api/print";
 import { useTicketStore } from "src/libs/client/store/kot.store";
-import { KOTList } from "./KitchTicketList";
+import { KOTListModal } from "./KitchTicketList";
 
 export function BillView() {
 
@@ -116,7 +116,7 @@ export function BillView() {
                 <Button size="sm" onClick={onKotListOpen}>KOTs</Button>
             </div>
             <div>
-                <KOTList items={tickets} isOpen={isKOTListOpen} onClose={onKoTListClose}/>
+                <KOTListModal items={tickets} isOpen={isKOTListOpen} onClose={onKoTListClose}/>
             </div>
      
         </div>

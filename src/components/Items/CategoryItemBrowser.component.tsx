@@ -19,7 +19,7 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
     const [items, setItems] = useState<Item[]>([]);
     const [clickedItem, setClickedItem] = useState<Item>();
     const [clickedItemQty, setClickedItemQty] = useState(1);
-    const [loading,setIsLoading] = useState(true);
+    const [loading, setIsLoading] = useState(true);
 
     const handleItemAdd = () => {
         if (billStore.currBill && clickedItem) {
@@ -64,8 +64,8 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
     }, []);
 
     const getItemCards = () => {
-        if(items?.length === 0) {
-           return <p>No items under this category</p>
+        if (items?.length === 0) {
+            return <p>No items under this category</p>
         }
         return items?.map(i => (
             <ItemCard key={i.id} onClick={handleItemClick} item={i} />
@@ -74,8 +74,8 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
 
     return (
         <>
-            <div className="flex flex-wrap justify-start overflow-y-scroll max-h-unit-9xl">
-                {!loading ? getItemCards(): <Spinner label="Loading Items"/>}
+            <div className="flex flex-wrap justify-start overflow-y-scroll max-h-unit-8xl">
+                {!loading ? getItemCards() : <Spinner label="Loading Items" />}
             </div>
             {(clickedItem && billStore.currBill) &&
                 // Add Item Modal
@@ -87,7 +87,7 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
                             <Image
                                 alt="Card background"
                                 className="object-cover rounded-xl"
-                                src={clickedItem.photo}
+                                src={clickedItem.photo || '/no_image.png'}
                                 width={270}
                                 height={270}
                             />
