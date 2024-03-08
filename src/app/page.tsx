@@ -52,25 +52,12 @@ export default function Home() {
           </div>
         </div>
 
-        <div className={styles.center}>
-          
-        </div>
-
-        <div className={styles.grid}>
-          {config.external_links.map((link)=>(
-            <a
-            key={link.url}
-            href={link.url}
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              {link.title} <span>-&gt;</span>
-            </h2>
-            <p>{link.description}</p>
-          </a>
-          ))}
+        <div >
+          <h1 className='text-2xl'>Fiesta Urban Cuisine</h1>
+          <h3>
+            Point of Sales & Daily Operations Management System
+          </h3>
+          <small>Version {config.app_ver}</small>
         </div>
 
       </main>
