@@ -40,6 +40,7 @@ CREATE TABLE `Item` (
     `price` DOUBLE NOT NULL,
     `photo` VARCHAR(191) NOT NULL,
     `categoryId` INTEGER NOT NULL,
+    `code` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -58,11 +59,20 @@ CREATE TABLE `BillItem` (
 CREATE TABLE `KitchenTicket` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `billId` VARCHAR(191) NOT NULL,
-    `billItemId` INTEGER NOT NULL,
     `issuedAt` DATETIME(3) NOT NULL,
-    `qty` INTEGER NOT NULL,
-    `typeOverride` ENUM('DINEIN', 'TAKEOUT') NULL,
+    `updatedAt` DATETIME(3) NULL,
     `status` ENUM('RECIEVED', 'PREPARING', 'DISPATCHED') NOT NULL DEFAULT 'RECIEVED',
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `KitchenTicketItem` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `itemId` INTEGER NOT NULL,
+    `qty` INTEGER NOT NULL,
+    `note` VARCHAR(191) NULL,
+    `kotId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -111,7 +121,10 @@ ALTER TABLE `BillItem` ADD CONSTRAINT `BillItem_itemId_fkey` FOREIGN KEY (`itemI
 ALTER TABLE `KitchenTicket` ADD CONSTRAINT `KitchenTicket_billId_fkey` FOREIGN KEY (`billId`) REFERENCES `Bill`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `KitchenTicket` ADD CONSTRAINT `KitchenTicket_billItemId_fkey` FOREIGN KEY (`billItemId`) REFERENCES `BillItem`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `KitchenTicketItem` ADD CONSTRAINT `KitchenTicketItem_kotId_fkey` FOREIGN KEY (`kotId`) REFERENCES `KitchenTicket`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `KitchenTicketItem` ADD CONSTRAINT `KitchenTicketItem_itemId_fkey` FOREIGN KEY (`itemId`) REFERENCES `BillItem`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `BillPayment` ADD CONSTRAINT `BillPayment_billId_fkey` FOREIGN KEY (`billId`) REFERENCES `Bill`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
