@@ -2,7 +2,7 @@
  * Get current bill tickets
  */
 
-import { PrismaClient } from "@prisma/client";
+import { KOTStatus, PrismaClient } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
@@ -14,13 +14,20 @@ export async function GET(request: Request, {params}: {params:{id:string}}){
             where: {
                 billId,   
             },
+            orderBy: {
+                status: 'asc',
+            },
             include:{
-                billItem: {
+                kotItems: {
                     include: {
-                        item: true
+                        billItem: {
+                            include: {
+                                item: true
+                            }
+                        }
                     }
                 }
-            }
+            },
         })
         return Response.json(kotRes);
     } catch (error) {

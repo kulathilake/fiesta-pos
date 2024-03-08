@@ -42,9 +42,6 @@ export class BillAPI {
     }
 
     static async updateBillItem(billId:string, billItemId:number, newQty:number, isDeleted:boolean):Promise<BillWithItems>{
-        const token = AuthAPIClient.getInstance().token
-        console.log(AuthAPIClient.getInstance())
-        console.log(token)
         return (await axios.put(`/pos/api/bill/${billId}/item/${billItemId}`,{
             billItemId,
             qty: newQty,

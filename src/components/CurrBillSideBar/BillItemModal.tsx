@@ -10,7 +10,7 @@ export function BillItemModal(props: { item: BillItemWithItem, isOpen: boolean, 
     const billStore = useBillStore();
     const ticketStore = useTicketStore();
 
-    const itemTickets = ticketStore.currBillTickets.filter(t=>t.billItemId === props.item.id)
+    // const itemTickets = ticketStore.currBillTickets.filter(t=>t.billItemId === props.item.id)
 
     const { item, isOpen, onClose } = props;
     const [itemQuantity, setItemQuantity] = useState(item.qty.toString());
@@ -48,7 +48,7 @@ export function BillItemModal(props: { item: BillItemWithItem, isOpen: boolean, 
                             +
                         </Button>
                     </div>
-                    <KOTList items={itemTickets}/>
+                    {/* <KOTList items={itemTickets}/> */}
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={()=>handleItemUpdate(false)} >Update</Button>

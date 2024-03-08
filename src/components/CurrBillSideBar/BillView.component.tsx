@@ -19,6 +19,7 @@ export function BillView() {
 
     const {isOpen: isBillUpdateOpen,onClose: onBillUpdateClose,onOpen: onBillUpdateOpen} = useDisclosure();
     const {isOpen: isCloseBillOpen, onClose: onCloseBillClose, onOpen: onCloseBillOpen} = useDisclosure();
+    const {isOpen: isKOTListOpen, onClose: onKoTListClose, onOpen: onKotListOpen} = useDisclosure();
 
     const [billTotal,setBillTotal] = useState(0);
     const [billItem,setBillItem] = useState<BillItemWithItem>();
@@ -112,9 +113,10 @@ export function BillView() {
                 <Button size="sm" color="success" onClick={handleCloseBillModalOpen}>💳 Pay & Close</Button>
                 {/* <Button size="sm" color="danger">🛑 Cancel</Button> */}
                 <Button size="sm" onClick={handlePrint} color="default">🖨️ Print</Button>
+                <Button size="sm" onClick={onKotListOpen}>KOTs</Button>
             </div>
             <div>
-                <KOTList items={tickets}/>
+                <KOTList items={tickets} isOpen={isKOTListOpen} onClose={onKoTListClose}/>
             </div>
      
         </div>

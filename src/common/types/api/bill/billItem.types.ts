@@ -6,6 +6,7 @@ export const BillItemValidator = z.object({
     itemId: z.number(),
     qty: z.number(),
     typeOverride: z.enum([BillType.DINEIN, BillType.TAKEOUT]).optional(),
+    note: z.string().optional()
 });
 
 export const UpdateBillItemValidator = z.object({

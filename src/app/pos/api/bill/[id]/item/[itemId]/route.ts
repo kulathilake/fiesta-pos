@@ -25,18 +25,7 @@ export async function PUT(request: Request, {params}: {params:{id:string}}) {
                     id: body.billItemId
                 }
             });
-
-            if((billItem.qty < body.qty) ) {
-                // Should create a new KOT.
-                await db.kitchenTicket.create({
-                    data: {
-                        billItemId: billItem.id,
-                        qty: body.qty - billItem.qty,
-                        billId: billId,
-                        issuedAt: new Date()
-                    }
-                })
-            }
+            
             const updateRes = await db.billItem.update({
                 data: {
                     qty: body.qty
