@@ -1,4 +1,4 @@
-import { Item } from "@prisma/client";
+import { Item, ItemCategory } from "@prisma/client";
 import { ChangeEvent, useEffect, useState } from "react";
 import { GetCategoryItemsResponse } from "src/common/types/api/items/item.types";
 import { ItemAPI } from "src/libs/client/api/item";
@@ -8,15 +8,17 @@ import { BillAPI } from "src/libs/client/api/bill";
 import { BillWithItems } from "src/common/types/api/bill/bill.types";
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Spinner, useDisclosure } from "@nextui-org/react";
 import Image from "next/image";
+import { useItemStore } from "src/libs/client/store/item.store";
 
 /**
  * component to display items for a given category
  * @param props 
  */
-export function CategoryItemBrowser(props: { categoryId: number }) {
+export function CategoryItemBrowser(props: { category: ItemCategory }) {
     const billStore = useBillStore(state => state);
+    const itemStore = useItemStore(state=>state);
+    
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [items, setItems] = useState<Item[]>([]);
     const [displayItems,setDisplayItems] = useState<Item[]>([]);
     const [clickedItem, setClickedItem] = useState<Item>();
     const [clickedItemQty, setClickedItemQty] = useState(1);
@@ -58,23 +60,24 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
         }
     }
 
-    useEffect(() => {
-        setIsLoading(true)
-        ItemAPI.getCategoryItems(props.categoryId)
-            .then((res: GetCategoryItemsResponse) => {
-                setItems(res.items)
-                setDisplayItems(res.items);
-                setIsLoading(false);
-            })
-    }, []);
-
     useEffect(()=>{
-        const filteredItems = items.filter(i=> {
+        const itemList = itemStore.items[props.category.id] 
+        const filterItems = (key:string,list:Item[]) => list.filter(i=> {
             return i.name.toLowerCase().includes(filterKey.toLowerCase());
         })
-        console.log(filteredItems)
-        setDisplayItems(filteredItems);
-    },[filterKey])
+        if(itemList){
+            setIsLoading(false);
+            setDisplayItems(filterItems(filterKey,itemList))
+        } else {
+            setIsLoading(true)
+            ItemAPI.getCategoryItems(props.category.id)
+            .then((res: GetCategoryItemsResponse) => {
+                itemStore.addCategoryItems(props.category,res.items)
+                setDisplayItems(filterItems(filterKey,res.items));
+                setIsLoading(false);
+            })
+        }
+    },[])
 
     return (
         <>

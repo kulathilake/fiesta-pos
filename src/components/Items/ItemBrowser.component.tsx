@@ -13,7 +13,7 @@ import { useBillStore } from "src/libs/client/store/bill.store";
 import { NewItemModal } from "./NewItemModal";
 
 export function ItemBrowser() {
-    const [categories, setCategories] = useState<{ id: number, label: string, section: string }[]>([]);
+    const [categories, setCategories] = useState<{ id: number, label: string, section: Section }[]>([]);
     const [sections, setSections] = useState<string[]>([]);
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export function ItemBrowser() {
     const getCategoryTabs = (section: string) => {
         return categories.filter(c => c.section === section).map(c => (
             <Tab key={c.id} title={c.label}>
-                <CategoryItemBrowser categoryId={c.id} />
+                <CategoryItemBrowser category={c} />
             </Tab>
         ))
     }
