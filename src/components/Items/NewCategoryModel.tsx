@@ -3,8 +3,10 @@ import { Section } from "@prisma/client";
 import { useState } from "react";
 import { getSectionLabel } from "./utils";
 import { ItemAPI } from "src/libs/client/api/item";
+import { useItemStore } from "src/libs/client/store/item.store";
 
-export function NewCategoryModel(props: { isOpen: boolean, onClose: () => void, callback: () => void }) {
+export function NewCategoryModel(props: { isOpen: boolean, onClose: () => void}) {
+    const itemStore = useItemStore(state=>state);
     const { isOpen, onClose } = props;
     const [section, setSection] = useState<Section>();
     const [label, setLabel] = useState("");
@@ -16,8 +18,9 @@ export function NewCategoryModel(props: { isOpen: boolean, onClose: () => void, 
             label,
             section
         })
-            .then(() => {
-                props.callback();
+            .then((res) => {
+                // props.callback();
+                itemStore.addNewCategory(res);
                 onClose()
             })
             .catch(e => {

@@ -32,10 +32,10 @@ export class ItemAPI {
   static async createNewCat(
     body: Partial<ItemCategory>
   ): Promise<ItemCategory> {
-    return await axios.post("/menu/api/items/categories", body, {
+    return (await axios.post("/menu/api/items/categories", body, {
       headers: {
         Authorization: AuthAPIClient.getInstance().token,
       },
-    });
+    })).data;
   }
 }

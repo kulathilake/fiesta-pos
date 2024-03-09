@@ -6,9 +6,10 @@ import { getSectionLabel } from "./utils";
 import { Section } from "@prisma/client";
 import { uploadImage } from "src/libs/client/cloudinary";
 import { NewCategoryModel } from "./NewCategoryModel";
+import { useItemStore } from "src/libs/client/store/item.store";
 
 export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
-
+    const itemStore = useItemStore(state=>state);
     const { isOpen: isNewCatOpen, onOpen: onNewCatOpen, onClose: onNewCatClose } = useDisclosure()
 
     const { isOpen, onClose } = props;
@@ -67,6 +68,7 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
     const fetchCategories = () => {
         ItemAPI.getItemCategories()
             .then((res: GetItemCatgoriesResponse) => {
+                itemStore.addCategories(res.categories);
                 res.categories.forEach(cat => {
                     if (!sections.includes(cat.section)) {
                         sections.push(cat.section)
@@ -74,19 +76,18 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
                 });
                 setSelectedCat(undefined)
                 setApplicableCats([]);
-                setCategories(res.categories);
                 setSections(sections);
             })
     }
 
     useEffect(() => {
         if (selectedSection) {
-            setApplicableCats(categories.filter(c => c.section === selectedSection?.toString()))
+            setApplicableCats(itemStore.categories.filter(c => c.section === selectedSection?.toString()))
         }
-    }, [selectedSection])
+    }, [selectedSection,itemStore])
 
     useEffect(() => {
-        fetchCategories()
+        fetchCategories();
     }, []);
 
     useEffect(() => {
@@ -112,7 +113,7 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
                             ))}
                         </Select>
                         <div className="flex flex-row items-center w-full gap-4">
-                            <Select label="Category" onChange={(e) => setSelectedCat(categories.find(c => c.id === +e.target.value))}>
+                            <Select label="Category" onChange={(e) => setSelectedCat(applicableCats.find(c => c.id === +e.target.value))}>
                                 {applicableCats.map(c => (
                                     <SelectItem value={+c.id} key={c.id}>{c.label}</SelectItem>
                                 ))}
@@ -146,7 +147,6 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
             <NewCategoryModel
                 isOpen={isNewCatOpen}
                 onClose={onNewCatClose}
-                callback={fetchCategories}
             />
         </Modal>
     )
