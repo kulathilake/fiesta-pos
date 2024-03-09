@@ -2,17 +2,31 @@
  * Get Item Categories
  */
 
-import { PrismaClient } from "@prisma/client";
-import { ITEM_CAT_FETCH_ERRORS } from "src/common/errors/item.errors";
+import { ItemCategory, PrismaClient } from "@prisma/client";
+import { ITEM_CAT_ERRORS } from "src/common/errors/item.errors";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(){
-    try {
-        const db = new PrismaClient();
-        const categories = await db.itemCategory.findMany()
-        return Response.json({categories});
-    } catch (error) {
-        return Response.json(ITEM_CAT_FETCH_ERRORS.ERROR_FETCHING_CATS, {status:500})
-    }
+export async function GET(request: Request) {
+  try {
+    const db = new PrismaClient();
+    const categories = await db.itemCategory.findMany();
+    return Response.json({ categories });
+  } catch (error) {
+    return Response.json(ITEM_CAT_ERRORS.ERROR_FETCHING_CATS, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = (await request.json()) as ItemCategory;
+    const db = new PrismaClient();
+    const response = await db.itemCategory.create({
+      data: body,
+    });
+
+    return Response.json(response);
+  } catch (error) {
+    return Response.json(ITEM_CAT_ERRORS.ERROR_CREATING_CAT, { status: 500 });
+  }
 }

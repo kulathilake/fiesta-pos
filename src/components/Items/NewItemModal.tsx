@@ -1,12 +1,15 @@
-import { Avatar, Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Spinner } from "@nextui-org/react";
+import { Avatar, Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Spinner, useDisclosure } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { GetItemCatgoriesResponse } from "src/common/types/api/items/item.types";
 import { ItemAPI } from "src/libs/client/api/item";
 import { getSectionLabel } from "./utils";
 import { Section } from "@prisma/client";
 import { uploadImage } from "src/libs/client/cloudinary";
+import { NewCategoryModel } from "./NewCategoryModel";
 
 export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
+
+    const { isOpen: isNewCatOpen, onOpen: onNewCatOpen, onClose: onNewCatClose } = useDisclosure()
 
     const { isOpen, onClose } = props;
     const [categories, setCategories] = useState<{ id: number, label: string, section: string }[]>([]);
@@ -40,7 +43,7 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
 
     const handleSave = () => {
         setIsSaveInProg(true);
-        
+
         ItemAPI.createNewItem({
             name,
             code,
@@ -49,16 +52,31 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
             categoryId: selectedCat?.id,
             photo: photoUrl
         })
-        .then(res=>{
+            .then(res => {
 
-        })
-        .catch(error=>{
+            })
+            .catch(error => {
 
-        })
-        .finally(()=>{
-            setIsSaveInProg(false);
-            onClose()
-        })
+            })
+            .finally(() => {
+                setIsSaveInProg(false);
+                onClose()
+            })
+    }
+
+    const fetchCategories = () => {
+        ItemAPI.getItemCategories()
+            .then((res: GetItemCatgoriesResponse) => {
+                res.categories.forEach(cat => {
+                    if (!sections.includes(cat.section)) {
+                        sections.push(cat.section)
+                    }
+                });
+                setSelectedCat(undefined)
+                setApplicableCats([]);
+                setCategories(res.categories);
+                setSections(sections);
+            })
     }
 
     useEffect(() => {
@@ -68,21 +86,12 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
     }, [selectedSection])
 
     useEffect(() => {
-        ItemAPI.getItemCategories()
-            .then((res: GetItemCatgoriesResponse) => {
-                res.categories.forEach(cat => {
-                    if (!sections.includes(cat.section)) {
-                        sections.push(cat.section)
-                    }
-                });
-                setCategories(res.categories);
-                setSections(sections);
-            })
+        fetchCategories()
     }, []);
 
     useEffect(() => {
         setOk2Save(
-            !!name.length && 
+            !!name.length &&
             !!code.length &&
             !!trans.length &&
             price > 0 &&
@@ -102,11 +111,16 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
                                 <SelectItem value={s} key={s}>{getSectionLabel(s as Section)}</SelectItem>
                             ))}
                         </Select>
-                        <Select label="Category" onChange={(e) => setSelectedCat(categories.find(c => c.id === +e.target.value))}>
-                            {applicableCats.map(c => (
-                                <SelectItem value={+c.id} key={c.id}>{c.label}</SelectItem>
-                            ))}
-                        </Select>
+                        <div className="flex flex-row items-center w-full gap-4">
+                            <Select label="Category" onChange={(e) => setSelectedCat(categories.find(c => c.id === +e.target.value))}>
+                                {applicableCats.map(c => (
+                                    <SelectItem value={+c.id} key={c.id}>{c.label}</SelectItem>
+                                ))}
+                            </Select>
+                            <Button isIconOnly color="primary" onClick={onNewCatOpen}>
+                                ⚙️
+                            </Button>
+                        </div>
                     </section>
                     <section id="basic" className="flex  max-w-md flex-wrap mb-6 md:mb-0 gap-4">
                         <Input label="Item Name" name="name" value={name} onChange={(e) => setName(e.target.value)} />
@@ -121,14 +135,19 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
                     </section>
                 </ModalBody>
                 <ModalFooter>
-                    <Button 
-                        onClick={handleSave} 
-                        disabled={!ok2Save} 
-                        color={ok2Save?"primary":"default"}
-                        endContent={isSaveInProg&&<Spinner/>}
-                        >Save</Button>
+                    <Button
+                        onClick={handleSave}
+                        disabled={!ok2Save}
+                        color={ok2Save ? "primary" : "default"}
+                        endContent={isSaveInProg && <Spinner />}
+                    >Save</Button>
                 </ModalFooter>
             </ModalContent>
+            <NewCategoryModel
+                isOpen={isNewCatOpen}
+                onClose={onNewCatClose}
+                callback={fetchCategories}
+            />
         </Modal>
     )
 }
