@@ -11,20 +11,22 @@ import { Section } from "@prisma/client";
 import { CategoryItemBrowser } from "./CategoryItemBrowser.component";
 import { useBillStore } from "src/libs/client/store/bill.store";
 import { NewItemModal } from "./NewItemModal";
+import { useItemStore } from "src/libs/client/store/item.store";
 
 export function ItemBrowser() {
+    const itemStore = useItemStore(state=>state);
     const [categories, setCategories] = useState<{ id: number, label: string, section: Section }[]>([]);
     const [sections, setSections] = useState<string[]>([]);
 
     useEffect(() => {
         ItemAPI.getItemCategories()
             .then((res: GetItemCatgoriesResponse) => {
+                itemStore.addCategories(res.categories);
                 res.categories.forEach(cat => {
                     if (!sections.includes(cat.section)) {
                         sections.push(cat.section)
                     }
                 });
-                setCategories(res.categories);
                 setSections(sections);
             })
     }, []);
@@ -40,7 +42,7 @@ export function ItemBrowser() {
     }
 
     const getCategoryTabs = (section: string) => {
-        return categories.filter(c => c.section === section).map(c => (
+        return itemStore.categories.filter(c => c.section === section).map(c => (
             <Tab key={c.id} title={c.label}>
                 <CategoryItemBrowser category={c} />
             </Tab>
@@ -49,7 +51,7 @@ export function ItemBrowser() {
 
     return (
         <div className="flex w-full flex-col justify-center">
-            {!!categories.length ?
+            {!!itemStore.categories.length ?
                 <>
                     <Tabs color="primary" variant="solid">
                         {getSectionTabs()}

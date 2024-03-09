@@ -1,6 +1,5 @@
 import { Avatar, Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Spinner, useDisclosure } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { GetItemCatgoriesResponse } from "src/common/types/api/items/item.types";
 import { ItemAPI } from "src/libs/client/api/item";
 import { getSectionLabel } from "./utils";
 import { Section } from "@prisma/client";
@@ -65,21 +64,6 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
             })
     }
 
-    const fetchCategories = () => {
-        ItemAPI.getItemCategories()
-            .then((res: GetItemCatgoriesResponse) => {
-                itemStore.addCategories(res.categories);
-                res.categories.forEach(cat => {
-                    if (!sections.includes(cat.section)) {
-                        sections.push(cat.section)
-                    }
-                });
-                setSelectedCat(undefined)
-                setApplicableCats([]);
-                setSections(sections);
-            })
-    }
-
     useEffect(() => {
         if (selectedSection) {
             setApplicableCats(itemStore.categories.filter(c => c.section === selectedSection?.toString()))
@@ -87,7 +71,7 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
     }, [selectedSection,itemStore])
 
     useEffect(() => {
-        fetchCategories();
+       setSections(Object.keys(Section))
     }, []);
 
     useEffect(() => {
