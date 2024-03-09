@@ -1,27 +1,31 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader, ListboxItem } from "@nextui-org/react";
 import { Item } from "@prisma/client";
 import Image from "next/image";
 import { formatNumberToCurrency } from "src/libs/utils/currency";
 
 export function ItemCard(props: { onClick: (item: Item) => void, item: Item }) {
     return (
-        <Card className="m-2 w-60" isPressable onClick={() => props.onClick(props.item)}>
-            <CardHeader className="px-4 flex-col items-start min-h-20">
-                <h4 className="font-bold text-large">{props.item.trans}</h4>
+        <Card
+            className="m-2 w-60 h-52"
+            isPressable
+            isFooterBlurred
+            onClick={() => props.onClick(props.item)}>
+            <Image
+                alt="Card background"
+                className="object-cover"
+                src={props.item.photo || '/no_image.png'}
+                fill={true}
+            />
+            <CardHeader className="bg-slate-600">
+                <div className="w-full">
+                    <h5 className="font-bold">{props.item.name}</h5>
+                </div>
             </CardHeader>
-            <CardBody className="overflow-visible h-32">
-                <Image
-                    alt="Card background"
-                    className="object-cover rounded-xl h-32"
-                    src={props.item.photo || '/no_image.png'}
-                    fill={true}
-                />
+            <CardBody className="overflow-visible">
             </CardBody>
-            <CardFooter>
-            <div className="text-center w-full">
-                <h3 className="capitalize font-bold">{props.item.name}</h3>
-                <h4 className="font-bold text-large">{formatNumberToCurrency(props.item.price)}</h4>
-            </div>
+            <CardFooter className=" flex-col text-slate-800 overflow-hidden py-1  z-10">
+                <p className="font-bold text-sm">{props.item.trans}</p>
+                <h4 className="font-bold">{formatNumberToCurrency(props.item.price)}</h4>
             </CardFooter>
         </Card>
     )
