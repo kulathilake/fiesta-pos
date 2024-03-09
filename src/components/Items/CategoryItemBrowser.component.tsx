@@ -17,9 +17,13 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
     const billStore = useBillStore(state => state);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [items, setItems] = useState<Item[]>([]);
+    const [displayItems,setDisplayItems] = useState<Item[]>([]);
     const [clickedItem, setClickedItem] = useState<Item>();
     const [clickedItemQty, setClickedItemQty] = useState(1);
     const [loading, setIsLoading] = useState(true);
+
+    // filter 
+    const [filterKey, setFilterKey] = useState("");
 
     const handleItemAdd = () => {
         if (billStore.currBill && clickedItem) {
@@ -59,28 +63,32 @@ export function CategoryItemBrowser(props: { categoryId: number }) {
         ItemAPI.getCategoryItems(props.categoryId)
             .then((res: GetCategoryItemsResponse) => {
                 setItems(res.items)
+                setDisplayItems(res.items);
                 setIsLoading(false);
             })
     }, []);
 
-    const getItemCards = () => {
-        if (items?.length === 0) {
-            return <p>No items under this category</p>
-        }
-        return items?.map(i => (
-            <ItemCard key={i.id} onClick={handleItemClick} item={i} />
-        ))
-    }
+    useEffect(()=>{
+        const filteredItems = items.filter(i=> {
+            return i.name.toLowerCase().includes(filterKey.toLowerCase());
+        })
+        console.log(filteredItems)
+        setDisplayItems(filteredItems);
+    },[filterKey])
 
     return (
         <>
+            <Input label="Search inside Category" size="sm" 
+                className="w-60"
+                value={filterKey.length?filterKey:''}
+                onChange={(e)=>setFilterKey(e.target.value)}/>
             <div className="flex flex-wrap justify-start overflow-y-scroll max-h-unit-8xl">
-                {!loading ? getItemCards() : <Spinner label="Loading Items" />}
+                {!loading ? displayItems.length? displayItems.map(i => (
+                    <ItemCard key={i.id} onClick={handleItemClick} item={i} />
+                )): <p>No items under this category</p> : <Spinner label="Loading Items" />}
             </div>
             {(clickedItem && billStore.currBill) &&
-                // Add Item Modal
-                // TODO Replace with the model
-                <Modal isOpen={isOpen} onClose={onClose}>
+                <Modal isOpen={isOpen} onClose={onClose} size="xs">
                     <ModalContent>
                         <ModalHeader>Add {clickedItem.name} to Bill ID {billStore.currBill.visibleId}</ModalHeader>
                         <ModalBody>
