@@ -77,7 +77,7 @@ export function CategoryItemBrowser(props: { category: ItemCategory }) {
                 setIsLoading(false);
             })
         }
-    },[])
+    },[filterKey])
 
     return (
         <>

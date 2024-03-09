@@ -12,7 +12,6 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
     const { isOpen: isNewCatOpen, onOpen: onNewCatOpen, onClose: onNewCatClose } = useDisclosure()
 
     const { isOpen, onClose } = props;
-    const [categories, setCategories] = useState<{ id: number, label: string, section: string }[]>([]);
     const [sections, setSections] = useState<string[]>([]);
 
     // Selections and Inputs
@@ -26,7 +25,6 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
     //Submission
     const [ok2Save, setOk2Save] = useState(false);
     const [isSaveInProg, setIsSaveInProg] = useState(false);
-
     const [name, setName] = useState('');
     const [code, setCode] = useState('');
     const [trans, setTrans] = useState('');
