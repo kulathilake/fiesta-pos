@@ -16,8 +16,8 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
 
     // Selections and Inputs
     const [selectedSection, setSelectedSection] = useState<Section>();
-    const [applicableCats, setApplicableCats] = useState<{ id: number, label: string, section: string }[]>([]);
-    const [selectedCat, setSelectedCat] = useState<{ id: number, label: string, section: string }>();
+    const [applicableCats, setApplicableCats] = useState<{ id: number, label: string, section: Section }[]>([]);
+    const [selectedCat, setSelectedCat] = useState<{ id: number, label: string, section: Section }>();
     // Photo
     const [isImageUploading, setIsImageUploading] = useState(false);
     const [photoUrl, setPhotoUrl] = useState();
@@ -51,7 +51,7 @@ export function NewItemModal(props: { isOpen: boolean, onClose: () => void }) {
             photo: photoUrl
         })
             .then(res => {
-
+                itemStore.addNewItem(selectedCat!,res)
             })
             .catch(error => {
 

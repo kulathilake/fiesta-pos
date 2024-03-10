@@ -14,7 +14,7 @@ model Employee {
   id  Int @id @default(autoincrement())
   hashedPin String
   name String
-  mobile BigInt
+  role Role
   otps  OTP[]
 }
 
@@ -104,6 +104,10 @@ model BillPayment {
 }
 
 // Enums
+enum Role {
+  REGULAR
+  ADMIN
+}
 enum Section {
   HOT_KITCHEN
   BBQ_N_GRILL

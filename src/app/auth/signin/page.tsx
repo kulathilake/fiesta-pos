@@ -12,7 +12,7 @@ export default function SignIn() {
 
     useEffect(()=>{
         if(isAuthorized){
-            redirect('/pos')
+            redirect('/')
         }
     },[isAuthorized])
 
