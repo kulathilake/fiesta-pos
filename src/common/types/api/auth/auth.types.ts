@@ -1,6 +1,7 @@
 /**
  * request and response types & validators for 'api/auth/otp' endpoint
  */
+import { Employee } from '@prisma/client';
 import {z} from 'zod';
 
 export const TokenRequestValidator = z.object({
@@ -25,4 +26,5 @@ export type TokenRequestBody = z.infer<typeof TokenRequestValidator>;
 
 export type TokenResponse = {
     accessToken: string;
+    employee: Employee
 }

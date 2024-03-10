@@ -23,7 +23,8 @@ export async function POST(request: Request) {
             if(employee){
                 const accessToken = signJWT(employee.id);
                 return Response.json({
-                    accessToken
+                    accessToken,
+                    employee
                 } as TokenResponse);
             }else{
                 return Response.json(TOKEN_ISSUE_ERRORS.INVALID_PIN_ERROR,{status:401});
