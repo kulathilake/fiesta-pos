@@ -13,6 +13,8 @@ import { NewItemModal } from "src/components/Items/NewItemModal";
 import Link from "next/link";
 import { useAuthStore } from "src/libs/client/store/auth.store";
 import { Role } from "@prisma/client";
+import { SalesSummaryWidget } from "src/components/SalesSummaryWidget";
+import { DateTime } from "luxon";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,8 +25,8 @@ export default function AppLayout({
   children: React.ReactNode,
   params: any
 }) {
-  const authStore = useAuthStore(state=>state);
-  const {isOpen: isNewItemOpen, onClose: newItemOnClose, onOpen: newItemOnOpen} = useDisclosure();
+  const authStore = useAuthStore(state => state);
+  const { isOpen: isNewItemOpen, onClose: newItemOnClose, onOpen: newItemOnOpen } = useDisclosure();
   const [authCheckInProgress, setAuthCheckInProgress] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -41,7 +43,7 @@ export default function AppLayout({
           authStore.authorize(res.token, res.employee, res.role);
           setAuthCheckInProgress(false)
         })
-        .catch(()=>{
+        .catch(() => {
           authStore.logout();
         })
     } else {
@@ -51,13 +53,13 @@ export default function AppLayout({
 
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(authStore.isAuthorized)
-  },[authStore])
+  }, [authStore])
 
 
   if (authCheckInProgress && !isAuthorized) {
-    return <LoadingScreen/>
+    return <LoadingScreen />
   }
   if (!authCheckInProgress && !isAuthorized) {
     redirect('/auth/signin')
@@ -70,22 +72,26 @@ export default function AppLayout({
       }}>
         <div className={styles.header}>
           <div>
-
-            
             <Button as={Link} href="/" className="mx-unit-1 bg-slate-500 text-color-white">Home</Button>
-            {authStore.role === Role.ADMIN && 
+            {authStore.role === Role.ADMIN &&
               <Button onClick={newItemOnOpen} color="secondary">🆕 New Menu Item</Button>
             }
-            <NewItemModal isOpen={isNewItemOpen} onClose={newItemOnClose}/>
+            <NewItemModal isOpen={isNewItemOpen} onClose={newItemOnClose} />
           </div>
-          <Image
-            src="/fiesta.png"
-            alt="Fiesta Logo"
-            className={styles.Logo}
-            width={138.7}
-            height={71.9}
-            priority
-          />
+          <div className="flex flex-row gap-4">
+            <SalesSummaryWidget
+              start={DateTime.now().startOf('day')}
+              end={DateTime.now().endOf('day')}
+            />
+            <Image
+              src="/fiesta.png"
+              alt="Fiesta Logo"
+              className={styles.Logo}
+              width={138.7}
+              height={71.9}
+              priority
+            />
+          </div>
         </div>
         <div className={`${styles.center}`}>
           <div className={styles.leftSideBar}>

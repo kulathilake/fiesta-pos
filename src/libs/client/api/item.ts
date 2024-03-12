@@ -11,6 +11,7 @@ import {
 import { AuthAPIClient } from "./auth";
 
 export class ItemAPI {
+
   static async getItemCategories(): Promise<GetItemCatgoriesResponse> {
     return (await axios.get("/menu/api/items/categories")).data;
   }
