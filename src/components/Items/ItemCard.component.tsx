@@ -23,7 +23,7 @@ export function ItemCard(props: { onClick: (item: Item) => void, item: Item }) {
             </CardHeader>
             <CardBody className="overflow-visible">
             </CardBody>
-            <CardFooter className=" flex-col text-slate-800 overflow-hidden py-1  z-10">
+            <CardFooter className=" flex-col text-white overflow-hidden py-1  z-10">
                 <p className="font-bold text-sm">{props.item.trans}</p>
                 <h4 className="font-bold">{formatNumberToCurrency(props.item.price)}</h4>
             </CardFooter>
