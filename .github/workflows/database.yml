@@ -1,6 +1,8 @@
 name: Database Migration
 on:
   push:
+    paths:
+      - 'prisma/**'
     branches:
       - main
 
