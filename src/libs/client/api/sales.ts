@@ -9,7 +9,7 @@ export class SalesApiClient {
      * @param end 
      */
     static async getPosSalesSummary(start:string,end:string) {
-        return (await axios.get('/dashboard/sales',{
+        return (await axios.get('/dashboard/api/sales',{
             params: {
                 start,
                 end
