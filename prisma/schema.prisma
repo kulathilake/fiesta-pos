@@ -103,6 +103,14 @@ model BillPayment {
   paidAt DateTime
 }
 
+model Expense {
+  expenseId Int @id @default(autoincrement())
+  type ExpenseType
+  incurredOn DateTime
+  description String
+  amount Float
+}
+
 // Enums
 enum Role {
   REGULAR
@@ -135,4 +143,11 @@ enum KOTStatus {
   RECIEVED
   PREPARING
   DISPATCHED
+}
+
+enum ExpenseType {
+  PURCHASE
+  UTILITY
+  MAINTAINENCE
+  OTHER
 }

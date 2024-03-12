@@ -1,4 +1,5 @@
 'use client'
+import { Role } from "@prisma/client";
 /**
  * Authentication API Client
  */
@@ -43,7 +44,7 @@ export class AuthAPIClient {
         }
     }
 
-    static async verifyLocalToken(token:string) {
+    static async verifyLocalToken(token:string):Promise<{token:string, employee:string, role: Role}> {
         try {
             const res = (await axios.post('/auth/api/token/verify',{},{
                 headers: {
@@ -53,9 +54,9 @@ export class AuthAPIClient {
             if(res){
                 this.getInstance()._token = token;
             }
-            return !!res;
+            return res.data as any;
         } catch (error) {
-            return false;
+            throw error;
         }
     }
 

@@ -21,7 +21,7 @@ export async function POST(request: Request) {
               })
 
             if(employee){
-                const accessToken = signJWT(employee.id);
+                const accessToken = signJWT(employee.id,employee.role);
                 return Response.json({
                     accessToken,
                     employee

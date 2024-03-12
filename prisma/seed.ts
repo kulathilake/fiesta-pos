@@ -2,7 +2,7 @@
  * Seed script for the database.
  */
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import crypto from 'crypto';
 import items from './item-data.json';
 
@@ -123,7 +123,7 @@ async function main(){
             id: 100,
             name: "Kolitha",
             hashedPin: crypto.createHash('sha256').update(pins[100]).digest('hex'),
-            mobile: 94772008505
+            role: Role.REGULAR
         }
     });
 
@@ -136,7 +136,7 @@ async function main(){
             id: 200,
             name: "Shehan",
             hashedPin: crypto.createHash('sha256').update(pins[200]).digest('hex'),
-            mobile: 94773121022
+            role: Role.ADMIN
         }
     });
 
@@ -149,7 +149,7 @@ async function main(){
             id: 300,
             name: "Kanishka",
             hashedPin: crypto.createHash('sha256').update(pins[300]).digest('hex'),
-            mobile: 94719575003
+            role: Role.ADMIN
         }
     });
 
@@ -162,7 +162,7 @@ async function main(){
             id: 400,
             name: "Jeewantha",
             hashedPin: crypto.createHash('sha256').update(pins[400]).digest('hex'),
-            mobile: 94755841388
+            role: Role.ADMIN
         }
     });
 
