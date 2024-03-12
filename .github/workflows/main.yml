@@ -1,11 +1,11 @@
-name: Deploy database
+name: Database Migration
 on:
   push:
     branches:
       - main
 
 jobs:
-  database:
+  migrate:
     runs-on: ubuntu-latest
     environment: production
     steps:
