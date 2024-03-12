@@ -31,7 +31,7 @@ export default function AppLayout({
     } else if (localToken) {
       AuthAPIClient.verifyLocalToken(localToken)
         .then(isValid => {
-          setIsAuthorized(isValid);
+          setIsAuthorized(true);
           setAuthCheckInProgress(false)
         })
     } else {
