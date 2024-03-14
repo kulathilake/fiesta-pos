@@ -44,6 +44,11 @@ export class AuthAPIClient {
         }
     }
 
+    static async logout() {
+        localStorage.removeItem('0');
+        window.location.reload();
+    }
+
     static async verifyLocalToken(token:string):Promise<{token:string, employee:string, role: Role}> {
         try {
             const res = (await axios.post('/auth/api/token/verify',{},{
