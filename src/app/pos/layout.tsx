@@ -79,11 +79,12 @@ export default function AppLayout({
             }
             <NewItemModal isOpen={isNewItemOpen} onClose={newItemOnClose} />
           </div>
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-row gap-4 items-center">
             <SalesSummaryWidget
               start={DateTime.now().startOf('day')}
               end={DateTime.now().endOf('day')}
             />
+            <Button size="sm" variant="faded" onClick={AuthAPIClient.logout}>Logout</Button>
             <Image
               src="/fiesta.png"
               alt="Fiesta Logo"
