@@ -115,6 +115,7 @@ model Expense {
 model InventoryCategory {
   id Int @id @default(autoincrement())
   label String
+  trans String
   items InventoryItem[]
 }
 model InventoryItem {
@@ -123,6 +124,7 @@ model InventoryItem {
   trans String
   categoryId Int
   category InventoryCategory @relation(fields: [categoryId], references: [id])
+  photo String
 }
 
 // Enums
