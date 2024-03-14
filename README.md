@@ -1,4 +1,4 @@
-[![Deploy database](https://github.com/kulathilake/fiesta-pos-app/actions/workflows/main.yml/badge.svg)](https://github.com/kulathilake/fiesta-pos-app/actions/workflows/main.yml)
+[![Deploy database](https://github.com/kulathilake/fiesta-pos-app/actions/workflows/database.prod.yml/badge.svg)](https://github.com/kulathilake/fiesta-pos-app/actions/workflows/main.yml)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -9,7 +9,7 @@ First, run the development server:
 ```bash
 npm run dev
 # or
-yarn dev
+yarn devda
 # or
 pnpm dev
 # or
