@@ -6,7 +6,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `inventorycategory` ADD COLUMN `trans` VARCHAR(191) NOT NULL;
+ALTER TABLE `InventoryCategory` ADD COLUMN `trans` VARCHAR(191) NOT NULL;
 
 -- AlterTable
-ALTER TABLE `inventoryitem` ADD COLUMN `photo` VARCHAR(191) NOT NULL;
+ALTER TABLE `InventoryItem` ADD COLUMN `photo` VARCHAR(191) NOT NULL;
