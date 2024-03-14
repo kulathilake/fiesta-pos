@@ -1,4 +1,4 @@
-[![Deploy database](https://github.com/kulathilake/fiesta-pos-app/actions/workflows/database.prod.yml/badge.svg)](https://github.com/kulathilake/fiesta-pos-app/actions/workflows/main.yml)
+[![Production Database Migration](https://github.com/kulathilake/fiesta-pos-occ/actions/workflows/database.prod.yml/badge.svg?branch=main)](https://github.com/kulathilake/fiesta-pos-occ/actions/workflows/database.prod.yml)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
