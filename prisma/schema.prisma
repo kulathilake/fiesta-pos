@@ -102,13 +102,27 @@ model BillPayment {
   balance Float?
   paidAt DateTime
 }
-
+// Expenses
 model Expense {
   expenseId Int @id @default(autoincrement())
   type ExpenseType
   incurredOn DateTime
   description String
   amount Float
+}
+
+// Inventory Related Entities
+model InventoryCategory {
+  id Int @id @default(autoincrement())
+  label String
+  items InventoryItem[]
+}
+model InventoryItem {
+  id Int @id @default(autoincrement())
+  name String
+  trans String
+  categoryId Int
+  category InventoryCategory @relation(fields: [categoryId], references: [id])
 }
 
 // Enums
