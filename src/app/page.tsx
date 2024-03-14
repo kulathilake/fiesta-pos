@@ -5,7 +5,6 @@ import styles from './page.module.css'
 import { config } from 'src/config/app.config'
 import { useEffect, useState } from 'react'
 import { AuthAPIClient } from 'src/libs/client/api/auth'
-import { redirect } from 'next/navigation'
 import { Button,Link } from '@nextui-org/react'
 import { LoadingScreen } from 'src/components/Screens/LoadingScreen'
 import { useAuthStore } from 'src/libs/client/store/auth.store'
@@ -49,7 +48,8 @@ export default function Home() {
           {authStore.isAuthorized ? <p>Welcome to Fiesta</p> : <p>
             Get started by <Link href={"/auth/signin"}>signing in</Link>
           </p>}
-          <div>
+          <div className='flex flex-row gap-4 items-center'>
+            {authStore.isAuthorized && <Button size="sm" variant="faded" onClick={AuthAPIClient.logout}>Logout</Button>}
             <a
               href="https://www.fiesta.lk"
               target="_blank"
