@@ -14,11 +14,17 @@ export class PrintClient {
             ...bill,
             total
         })
+        .catch(()=>{
+            alert("Failed to print");
+        })
     }
 
     static async printKot(kot: KOTWithItems) {
         axios.post(`${PRINT_SERVER_ADDR}/print/kot`,{
             kot,
+        })
+        .catch(()=>{
+            alert("failed to print")
         })
     }
 }
