@@ -16,16 +16,13 @@ import { useItemStore } from "src/libs/client/store/item.store";
  */
 export function CategoryItemBrowser(props: { category: ItemCategory }) {
     const billStore = useBillStore(state => state);
-    const itemStore = useItemStore(state=>state);
-    
+    const itemStore = useItemStore(state => state);
+
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [displayItems,setDisplayItems] = useState<Item[]>([]);
+    const [displayItems, setDisplayItems] = useState<Item[]>([]);
     const [clickedItem, setClickedItem] = useState<Item>();
     const [clickedItemQty, setClickedItemQty] = useState(1);
     const [loading, setIsLoading] = useState(true);
-
-    // filter 
-    const [filterKey, setFilterKey] = useState("");
 
     const handleItemAdd = () => {
         if (billStore.currBill && clickedItem) {
@@ -60,35 +57,40 @@ export function CategoryItemBrowser(props: { category: ItemCategory }) {
         }
     }
 
-    useEffect(()=>{
-        const itemList = itemStore.items[props.category.id] 
-        const filterItems = (key:string,list:Item[]) => list.filter(i=> {
-            return i.name.toLowerCase().includes(filterKey.toLowerCase());
-        })
-        if(itemList){
+    useEffect(() => {
+        const itemList = itemStore.items[props.category.id]
+
+        if (itemList) {
             setIsLoading(false);
-            setDisplayItems(filterItems(filterKey,itemList))
+            setDisplayItems(itemList)
         } else {
             setIsLoading(true)
             ItemAPI.getCategoryItems(props.category.id)
-            .then((res: GetCategoryItemsResponse) => {
-                itemStore.addCategoryItems(props.category,res.items)
-                setDisplayItems(filterItems(filterKey,res.items));
-                setIsLoading(false);
-            })
+                .then((res: GetCategoryItemsResponse) => {
+                    itemStore.addCategoryItems(props.category, res.items)
+                    setDisplayItems(res.items);
+                    setIsLoading(false);
+                })
         }
-    },[filterKey,itemStore])
+
+        if (itemStore.selectedItem) {
+            onOpen()
+            setClickedItem(itemStore.selectedItem)
+        }
+    }, [itemStore])
+
+    useEffect(() => {
+        if (!isOpen) {
+            itemStore.setSelectedItem(null);
+        }
+    }, [isOpen])
 
     return (
         <>
-            <Input label="Search inside Category" size="sm" 
-                className="w-60"
-                value={filterKey.length?filterKey:''}
-                onChange={(e)=>setFilterKey(e.target.value)}/>
             <div className="flex flex-wrap justify-start overflow-y-scroll max-h-unit-8xl">
-                {!loading ? displayItems.length? displayItems.map(i => (
+                {!loading ? displayItems.length ? displayItems.map(i => (
                     <ItemCard key={i.id} onClick={handleItemClick} item={i} />
-                )): <p>No items under this category</p> : <Spinner label="Loading Items" />}
+                )) : <p>No items under this category</p> : <Spinner label="Loading Items" />}
             </div>
             {(clickedItem && billStore.currBill) &&
                 <Modal isOpen={isOpen} onClose={onClose} size="xs">
