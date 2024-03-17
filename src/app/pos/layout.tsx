@@ -15,6 +15,7 @@ import { useAuthStore } from "src/libs/client/store/auth.store";
 import { Role } from "@prisma/client";
 import { SalesSummaryWidget } from "src/components/SalesSummaryWidget";
 import { DateTime } from "luxon";
+import { EndSalesModal } from "src/components/Sales/EndSales/EndSalesModal";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,6 +28,7 @@ export default function AppLayout({
 }) {
   const authStore = useAuthStore(state => state);
   const { isOpen: isNewItemOpen, onClose: newItemOnClose, onOpen: newItemOnOpen } = useDisclosure();
+  const {isOpen: isEndSalesOpen, onClose: endSalesOnClose, onOpen: endSalesOnOpen} = useDisclosure();
   const [authCheckInProgress, setAuthCheckInProgress] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -84,6 +86,7 @@ export default function AppLayout({
               start={DateTime.now().startOf('day')}
               end={DateTime.now().endOf('day')}
             />
+            <Button size="sm" variant="faded" className="font-bold" color="warning" onClick={endSalesOnOpen}>End Sales</Button>
             <Button size="sm" variant="faded" onClick={AuthAPIClient.logout}>Logout</Button>
             <Image
               src="/fiesta.png"
@@ -108,7 +111,7 @@ export default function AppLayout({
         </div>
         <div className={styles.footer}></div>
       </main>
-
+      <EndSalesModal isOpen={isEndSalesOpen} onClose={endSalesOnClose}/>
     </NextUIProvider>
   )
 }

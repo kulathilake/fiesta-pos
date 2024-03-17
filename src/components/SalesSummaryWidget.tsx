@@ -5,7 +5,7 @@
 import { Button, Spinner, Tooltip } from "@nextui-org/react";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
-import { GetSalesResponse } from "src/common/types/api/sales/sales.types";
+import { GetSalesSummaryResponse } from "src/common/types/api/sales/sales.types";
 import { SalesApiClient } from "src/libs/client/api/sales";
 import { useBillStore } from "src/libs/client/store/bill.store";
 import { formatNumberToCurrency } from "src/libs/utils/currency";
@@ -14,7 +14,7 @@ export function SalesSummaryWidget(props: { start: DateTime, end: DateTime }) {
     const billStore = useBillStore(s => s);
     const [isLoading, setIsLoading] = useState(false);
     const [hasError, setHasError] = useState(false);
-    const [sales, setSales] = useState<GetSalesResponse>();
+    const [sales, setSales] = useState<GetSalesSummaryResponse>();
 
     const fetchSales = () => {
         setIsLoading(true)

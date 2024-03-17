@@ -2,10 +2,9 @@
  * Sales Endpoints
  */
 
-import { PrismaClient } from "@prisma/client";
 import { NextRequest } from "next/server";
 import { SALES_ENDPOINT_ERRORS } from "src/common/errors/sales.errors";
-import { GetSalesResponse } from "src/common/types/api/sales/sales.types";
+import { GetSalesSummaryResponse } from "src/common/types/api/sales/sales.types";
 import { getPrismaClient } from "src/libs/server/prisma";
 
 /**
@@ -78,7 +77,7 @@ export async function GET(request:NextRequest, c:any,d:any) {
                 start: new Date(start),
                 end: new Date(end)
             }
-        } as GetSalesResponse) 
+        } as GetSalesSummaryResponse) 
     } catch (error) {
         console.error(error);
         return Response.json(SALES_ENDPOINT_ERRORS.ERROR_RETRIEVING_SALES,{status:500})
