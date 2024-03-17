@@ -73,7 +73,7 @@ export default function AppLayout({
         <div className={styles.header}>
           <div className="flex gap-4">
             <Button as={Link} href="/" className=" bg-slate-500 text-color-white">Home</Button>
-            <Button>Add Expense</Button>
+            {/* <Button>Add Expense</Button> */}
             {authStore.role === Role.ADMIN &&
               <Button onClick={newItemOnOpen}>New Menu Item</Button>
             }
