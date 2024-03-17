@@ -4,12 +4,13 @@
 
 import { ItemCategory, PrismaClient } from "@prisma/client";
 import { ITEM_CAT_ERRORS } from "src/common/errors/item.errors";
+import { getPrismaClient } from "src/libs/server/prisma";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   try {
-    const db = new PrismaClient();
+    const db = getPrismaClient();
     const categories = await db.itemCategory.findMany();
     return Response.json({ categories });
   } catch (error) {
@@ -20,7 +21,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as ItemCategory;
-    const db = new PrismaClient();
+    const db = getPrismaClient();
     const response = await db.itemCategory.create({
       data: body,
     });

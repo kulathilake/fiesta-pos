@@ -4,13 +4,14 @@
 
 import { PrismaClient } from "@prisma/client";
 import { KOT_ERRORS } from "src/common/errors/kot.errors";
+import { getPrismaClient } from "src/libs/server/prisma";
 
 export async function DELETE(
   request: Request,
   { params }: { params: { itemId: string; kotId: string } }
 ) {
   try {
-    const db = new PrismaClient();
+    const db = getPrismaClient()
     const item = await db.kitchenTicketItem.findFirst({
       where: {
         id: +params.itemId,

@@ -3,12 +3,13 @@
  */
 
 import { PrismaClient } from "@prisma/client"
+import { getPrismaClient } from "src/libs/server/prisma";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request, { params }: { params: { category: string } }) {
     try {
-        const db = new PrismaClient();
+        const db = getPrismaClient();
         const itemRes = await db.item.findMany({
             where: {
                 categoryId: Number(params.category)

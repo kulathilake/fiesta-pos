@@ -6,12 +6,13 @@ import { PrismaClient } from "@prisma/client";
 import { DateTime } from "luxon";
 import { OPEN_BILL_ERROR } from "src/common/errors/bill.errors";
 import { OpenBillReqBody } from "src/common/types/api/bill/bill.types";
+import { getPrismaClient } from "src/libs/server/prisma";
 import { billIdGenerator } from "src/libs/utils/ids";
 
 export async function POST(request: Request) {
     try {
         const body = (await request.json()) as OpenBillReqBody
-        const db = new PrismaClient();
+        const db = getPrismaClient();
         const lastBill = (await db.bill.findMany({
             take: 1,
             orderBy: {

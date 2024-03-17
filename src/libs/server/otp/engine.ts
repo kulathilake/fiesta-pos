@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import short from 'short-uuid';
 import { PrismaClient } from '@prisma/client';
 import {DateTime} from 'luxon';
+import { getPrismaClient } from '../prisma';
 
 const OTP_LIFETIME_IN_MSEC = 300000;
 
@@ -12,7 +13,7 @@ const OTP_LIFETIME_IN_MSEC = 300000;
 export class OTPEngine {
     private db: PrismaClient;
     constructor(){
-        this.db = new PrismaClient();
+        this.db = getPrismaClient()
     }
 
     async generateOTP(employeeId: number):Promise<{

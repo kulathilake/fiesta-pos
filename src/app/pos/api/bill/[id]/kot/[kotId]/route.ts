@@ -7,10 +7,11 @@ import { DateTime } from "luxon";
 import { UPDATE_BILL_ITEM_ERROR } from "src/common/errors/billItem.errors";
 import { UpdateBillItemBody, UpdateBillItemValidator } from "src/common/types/api/bill/billItem.types";
 import { KOTChangeStatusRequestBody } from "src/common/types/api/bill/kot.types";
+import { getPrismaClient } from "src/libs/server/prisma";
 
 export async function PUT(request: Request, {params}: {params:{kotId:string}}) {
     const {kotId} = params;
-    const db = new PrismaClient();
+    const db = getPrismaClient();
     try {
         const body = (await request.json()) as KOTChangeStatusRequestBody;
         const response = await db.kitchenTicket.update({
