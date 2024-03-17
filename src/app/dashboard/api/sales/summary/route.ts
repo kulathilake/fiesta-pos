@@ -6,6 +6,7 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest } from "next/server";
 import { SALES_ENDPOINT_ERRORS } from "src/common/errors/sales.errors";
 import { GetSalesResponse } from "src/common/types/api/sales/sales.types";
+import { getPrismaClient } from "src/libs/server/prisma";
 
 /**
  * Get sales for a given period of time
@@ -20,7 +21,7 @@ export async function GET(request:NextRequest, c:any,d:any) {
         return Response.json(SALES_ENDPOINT_ERRORS.START_AND_END_REQUIRED_ERR,{status:400})
     }
     try {
-        const db = new PrismaClient();
+        const db = getPrismaClient()
         const finalizedSales = (await db.billPayment.aggregate({
             _sum: {
                 total: true

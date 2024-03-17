@@ -5,13 +5,14 @@
 import { PrismaClient } from "@prisma/client";
 import { UPDATE_BILL_ITEM_ERROR } from "src/common/errors/billItem.errors";
 import { UpdateBillItemBody, UpdateBillItemValidator } from "src/common/types/api/bill/billItem.types";
+import { getPrismaClient } from "src/libs/server/prisma";
 
 export async function PUT(request: Request, {params}: {params:{id:string}}) {
     const {id:billId} = params;
     try {
         const body = await request.json() as UpdateBillItemBody;
         UpdateBillItemValidator.parse(body);
-        const db = new PrismaClient();
+        const db = getPrismaClient();
         if(body.isDeleted) {
             const deleteRes = await db.billItem.delete({
                 where: {

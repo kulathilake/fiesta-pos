@@ -4,11 +4,12 @@
 
 import { BillStatus, PrismaClient } from "@prisma/client";
 import { OPEN_BILL_ERROR } from "src/common/errors/bill.errors";
+import { getPrismaClient } from "src/libs/server/prisma";
 export const dynamic = "force-dynamic";
 
 export async function GET(){
     try {
-        const db = new PrismaClient();
+        const db = getPrismaClient();
         const res = await db.bill.findMany({
             where: {
                 status: BillStatus.OPEN

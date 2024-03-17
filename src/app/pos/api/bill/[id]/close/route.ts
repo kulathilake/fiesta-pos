@@ -5,11 +5,12 @@
 import { PrismaClient } from "@prisma/client";
 import { CLOSE_BILL_ERROR } from "src/common/errors/bill.errors";
 import { CloseBillReqBody } from "src/common/types/api/bill/bill.types";
+import { getPrismaClient } from "src/libs/server/prisma";
 
 export async function PUT(request:Request){
     try {
         const body = await request.json() as CloseBillReqBody
-        const db = new PrismaClient();
+        const db = getPrismaClient();
         try {
             const paymentRes = db.billPayment.create({
                 data: {

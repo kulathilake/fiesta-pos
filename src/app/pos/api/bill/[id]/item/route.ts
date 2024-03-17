@@ -13,6 +13,7 @@ import {
   BillItemValidator,
   CreateBillItemBody,
 } from "src/common/types/api/bill/billItem.types";
+import { getPrismaClient } from "src/libs/server/prisma";
 
 /**
  * Creates a bill item
@@ -23,7 +24,7 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as CreateBillItemBody;
     BillItemValidator.parse(body);
-    const db = new PrismaClient();
+    const db = getPrismaClient();
     try {
       const bill = await db.bill.findFirstOrThrow({
         where: {

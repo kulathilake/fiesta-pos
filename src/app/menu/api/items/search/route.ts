@@ -4,6 +4,7 @@
 
 import { PrismaClient } from "@prisma/client";
 import { NextRequest } from "next/server";
+import { getPrismaClient } from "src/libs/server/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
   const q = params.get("query");
   try {
     if (!q) return Response.json([]);
-    const db = new PrismaClient();
+    const db = getPrismaClient();
     const itemRes = await db.item.findMany({
       where: {
         OR: [

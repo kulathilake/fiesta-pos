@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { TOKEN_ISSUE_ERRORS } from "src/common/errors/auth.errors";
 import { TokenRequestBody, TokenRequestValidator, TokenResponse } from "src/common/types/api/auth/auth.types";
 import { signJWT } from "src/libs/server/jwt";
+import { getPrismaClient } from "src/libs/server/prisma";
 import { hashPin } from "src/libs/utils/crypto";
 
 /**
@@ -10,7 +11,7 @@ import { hashPin } from "src/libs/utils/crypto";
 export async function POST(request: Request) {
     try {
         const body = (await request.json()) as TokenRequestBody;
-        const db = new PrismaClient();
+        const db = getPrismaClient();
         TokenRequestValidator.parse(body);
         try {
             const employee = await db.employee.findUnique({
