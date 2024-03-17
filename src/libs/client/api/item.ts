@@ -11,7 +11,6 @@ import {
 import { AuthAPIClient } from "./auth";
 
 export class ItemAPI {
-
   static async getItemCategories(): Promise<GetItemCatgoriesResponse> {
     return (await axios.get("/menu/api/items/categories")).data;
   }
@@ -33,10 +32,27 @@ export class ItemAPI {
   static async createNewCat(
     body: Partial<ItemCategory>
   ): Promise<ItemCategory> {
-    return (await axios.post("/menu/api/items/categories", body, {
-      headers: {
-        Authorization: AuthAPIClient.getInstance().token,
-      },
-    })).data;
+    return (
+      await axios.post("/menu/api/items/categories", body, {
+        headers: {
+          Authorization: AuthAPIClient.getInstance().token,
+        },
+      })
+    ).data;
+  }
+
+  static async searchByCode(
+    query: string,
+    signal: AbortSignal
+  ): Promise<Item[]> {
+    return (
+      await axios.get("/menu/api/items/search", {
+        params: { query },
+        headers: {
+          Authorization: AuthAPIClient.getInstance().token,
+        },
+        signal,
+      })
+    ).data;
   }
 }
