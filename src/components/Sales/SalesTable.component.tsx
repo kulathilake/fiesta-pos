@@ -56,7 +56,7 @@ export function SalesTable(props: { start: DateTime, end: DateTime }) {
                 bottomContent={
                     <div className="flex flex-col gap-3">
                         <div className="flex justify-center">
-                            <Pagination 
+                            <Pagination
                                 isCompact
                                 showControls
                                 showShadow

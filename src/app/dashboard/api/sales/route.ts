@@ -40,7 +40,7 @@ export async function GET(request: NextRequest, c: any, d: any) {
 
     let total = 0;
     response.forEach((payment) => {
-        total += payment.total
+      total += payment.total;
     });
 
     const salesResponse = response.map((payment) => {

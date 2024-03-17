@@ -9,8 +9,8 @@ import { SalesApiClient } from "src/libs/client/api/sales";
 import { formatNumberToCurrency } from "src/libs/utils/currency";
 
 export function ExpenseTable(props: { start: DateTime, end: DateTime }) {
-    const [isLoading,setIsLoading] = useState(true);
-    const [rows, setRows] = useState<{key:string, label:string, value:string}[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [rows, setRows] = useState<{ key: string, label: string, value: string }[]>([]);
 
     const columns = [
         {
@@ -30,9 +30,9 @@ export function ExpenseTable(props: { start: DateTime, end: DateTime }) {
         setIsLoading(false)
     }, [props]);
 
-    if(isLoading){
-       return <div className="flex justify-center">
-        <Spinner label="Loading Expenses"/>
+    if (isLoading) {
+        return <div className="flex justify-center">
+            <Spinner label="Loading Expenses" />
         </div>
     }
     return (
@@ -43,21 +43,22 @@ export function ExpenseTable(props: { start: DateTime, end: DateTime }) {
                 </TableHeader>
                 <TableBody items={rows}>
                     {(item) => {
-                        if(item.label==="TOTAL"){
+                        if (item.label === "TOTAL") {
                             return (
                                 <TableRow>
-                                    <TableCell 
+                                    <TableCell
                                         className="font-extrabold text-green-300">Total</TableCell>
-                                    <TableCell 
+                                    <TableCell
                                         className="font-extrabold text-green-300">{item.value}</TableCell>
                                 </TableRow>
                             )
                         }
                         return (
-                        <TableRow key={item.key}>
-                            {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
-                        </TableRow>
-                    )}}
+                            <TableRow key={item.key}>
+                                {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+                            </TableRow>
+                        )
+                    }}
                 </TableBody>
             </Table>
         </div>

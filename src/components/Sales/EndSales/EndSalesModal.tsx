@@ -22,7 +22,7 @@ export function EndSalesModal(props: { isOpen: boolean, onClose: () => void }) {
                     />
                 </ModalHeader>
                 <ModalBody>
-                    <EndSalesForm start={today} end={today}/>
+                    <EndSalesForm start={today} end={today} />
                 </ModalBody>
                 <ModalFooter>
                     <Button onClick={props.onClose}>Cancel</Button>
