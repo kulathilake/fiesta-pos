@@ -105,10 +105,26 @@ model BillPayment {
 // Expenses
 model Expense {
   expenseId Int @id @default(autoincrement())
+  billId String
   type ExpenseType
   incurredOn DateTime
-  description String
+  comment String
   amount Float
+}
+
+model DailyRecord {
+  id Int @id @default(autoincrement())
+  date DateTime @unique()
+  openingTime DateTime
+  endingTime DateTime?
+  totalSales Float?
+  totalExpenses Float?
+  openingCashBalance Float
+  actualCashBalance Float?
+  toCashLodge Float?
+  toCashDrawer Float?
+  openedBy String?
+  closedBy String?
 }
 
 // Inventory Related Entities

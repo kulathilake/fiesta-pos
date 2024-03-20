@@ -1,22 +1,22 @@
 'use client'
-import { Inter } from "next/font/google"
 import styles from './layout.module.css';
 import Image from "next/image";
 import { BillSideBarComponent } from "src/components/OpenBillsBar/BillSideBar.component";
 import { useEffect, useState } from "react";
 import { AuthAPIClient } from "src/libs/client/api/auth";
 import { redirect } from "next/navigation";
-import { Button, NextUIProvider, useDisclosure } from "@nextui-org/react";
+import { Button, NextUIProvider, Spinner, useDisclosure } from "@nextui-org/react";
 import { ItemBrowser } from "src/components/Items/ItemBrowser.component";
 import { LoadingScreen } from "src/components/Screens/LoadingScreen";
 import { NewItemModal } from "src/components/Items/NewItemModal";
 import Link from "next/link";
 import { useAuthStore } from "src/libs/client/store/auth.store";
-import { Role } from "@prisma/client";
+import { DailyRecord, Role } from "@prisma/client";
 import { SalesSummaryWidget } from "src/components/SalesSummaryWidget";
 import { DateTime } from "luxon";
-
-const inter = Inter({ subsets: ['latin'] })
+import { EndSalesModal } from "src/components/DailyRecord/EndSalesModal";
+import { DailyRecordClient } from "src/libs/client/api/dailyrecord";
+import { OpeningBalanceDialog } from 'src/components/DailyRecord/OpenningBalDlg';
 
 export default function AppLayout({
   children,
@@ -27,8 +27,60 @@ export default function AppLayout({
 }) {
   const authStore = useAuthStore(state => state);
   const { isOpen: isNewItemOpen, onClose: newItemOnClose, onOpen: newItemOnOpen } = useDisclosure();
+  const {isOpen: isEndSalesOpen, onClose: endSalesOnClose, onOpen: endSalesOnOpen} = useDisclosure();
   const [authCheckInProgress, setAuthCheckInProgress] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
+
+  // Daily Record
+  const { isOpen: isOpeningBalanceOpen, onClose: openBalOnClose, onOpen: openBalOnOpen } = useDisclosure();
+  const [record,setRecord] = useState<DailyRecord>();
+  const [isDailyRecordLoading,setIsDailyRecordLoading] = useState(false);
+  
+  const checkDailyRecord = () => {
+      setIsDailyRecordLoading(true);
+      const date = DateTime.now().startOf("day").toJSDate()
+      DailyRecordClient.getDailyRecord(date)
+      .then(res=>{
+        if(!res){
+          openBalOnOpen();
+        }else{
+          setRecord({
+            ...res,
+            date: new Date(res.date),
+            openingTime: new Date(res.openingTime)
+          });
+        }
+      })
+      .catch((e)=>{
+
+      })
+      .finally(()=>{
+        setIsDailyRecordLoading(false)
+      })
+  }
+
+  const openDailyRecord = async (openingBalance:number) => {
+    const date = DateTime.now().startOf("day").toJSDate();
+    return DailyRecordClient.openDailyRecord({
+      date,
+      openingCashBalance:openingBalance,
+      openingTime: new Date(),
+      openedBy: authStore.userId!
+    })
+    .then(res=>{
+      setRecord({
+        ...res,
+        date: new Date(res.date),
+        openingTime: new Date(res.openingTime)
+      });
+    })
+    .catch(e=>{
+
+    })
+    .finally(()=>{
+
+    })
+  }
 
   useEffect(() => {
     const localToken = localStorage.getItem('0');
@@ -41,7 +93,8 @@ export default function AppLayout({
         .then(res => {
           setIsAuthorized(true);
           authStore.authorize(res.token, res.employee, res.role);
-          setAuthCheckInProgress(false)
+          setAuthCheckInProgress(false);
+          checkDailyRecord();
         })
         .catch(() => {
           authStore.logout();
@@ -54,8 +107,10 @@ export default function AppLayout({
   }, []);
 
   useEffect(() => {
-    console.log(authStore.isAuthorized)
-  }, [authStore])
+    if(isEndSalesOpen){
+      checkDailyRecord()
+    }
+  }, [isEndSalesOpen])
 
 
   if (authCheckInProgress && !isAuthorized) {
@@ -80,10 +135,19 @@ export default function AppLayout({
             <NewItemModal isOpen={isNewItemOpen} onClose={newItemOnClose} />
           </div>
           <div className="flex flex-row gap-4 items-center">
+            <div className='flex flex-col min-w-unit-sm'>
+              <p>Daily Record</p>
+              <div className="flex flex-row items-end gap-4">
+                <p>{record?.date.toDateString()}</p>
+                <p>From: {record?.openingTime.toLocaleTimeString()}</p>
+                <Button size="sm" isIconOnly variant="flat" onClick={checkDailyRecord}>{isDailyRecordLoading ? <Spinner /> : "⟳"}</Button>
+              </div>
+            </div>
             <SalesSummaryWidget
               start={DateTime.now().startOf('day')}
               end={DateTime.now().endOf('day')}
             />
+            <Button size="sm" variant="faded" className="font-bold" color="warning" onClick={endSalesOnOpen}>End Sales</Button>
             <Button size="sm" variant="faded" onClick={AuthAPIClient.logout}>Logout</Button>
             <Image
               src="/fiesta.png"
@@ -108,7 +172,11 @@ export default function AppLayout({
         </div>
         <div className={styles.footer}></div>
       </main>
-
+      <OpeningBalanceDialog 
+        isOpen={isOpeningBalanceOpen} 
+        onClose={openBalOnClose} 
+        callback={openDailyRecord}/>
+      <EndSalesModal isOpen={isEndSalesOpen} onClose={endSalesOnClose}/>
     </NextUIProvider>
   )
 }
