@@ -68,7 +68,11 @@ export default function AppLayout({
       openedBy: authStore.userId!
     })
     .then(res=>{
-
+      setRecord({
+        ...res,
+        date: new Date(res.date),
+        openingTime: new Date(res.openingTime)
+      });
     })
     .catch(e=>{
 
@@ -135,7 +139,7 @@ export default function AppLayout({
               <p>Daily Record</p>
               <div className="flex flex-row items-end gap-4">
                 <p>{record?.date.toDateString()}</p>
-                <p>Open: {record?.openingTime.toLocaleTimeString()}</p>
+                <p>From: {record?.openingTime.toLocaleTimeString()}</p>
                 <Button size="sm" isIconOnly variant="flat" onClick={checkDailyRecord}>{isDailyRecordLoading ? <Spinner /> : "⟳"}</Button>
               </div>
             </div>
