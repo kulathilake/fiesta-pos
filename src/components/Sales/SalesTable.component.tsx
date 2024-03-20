@@ -10,12 +10,11 @@ import { formatNumberToCurrency } from "src/libs/utils/currency";
 
 const MAX_PER_PAGE = 10;
 
-export function SalesTable(props: { start: DateTime, end: DateTime }) {
+export function SalesTable(props: { start: DateTime, end: DateTime, totalCallback: (t:number)=>void }) {
     const [isLoading, setIsLoading] = useState(true);
     const [rows, setRows] = useState<{ key: string, label: string, value: string }[]>([]);
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(0);
-    const [total, setTotal] = useState(0);
 
     const columns = [
         {
@@ -28,6 +27,7 @@ export function SalesTable(props: { start: DateTime, end: DateTime }) {
         }
     ]
     useEffect(() => {
+        console.log(props);
         SalesApiClient.getPosSales(
             props.start.toISO()!,
             props.end.toISO()!
@@ -38,8 +38,13 @@ export function SalesTable(props: { start: DateTime, end: DateTime }) {
                     label: sale.billId,
                     value: formatNumberToCurrency(sale.total)
                 }));
+                rows_.push({
+                    key: "",
+                    label: "TOTAL",
+                    value: formatNumberToCurrency(res.total)
+                })
                 setRows(rows_);
-                setTotal(res.total);
+                props.totalCallback(res.total);
                 setPages(Math.ceil(rows_.length / MAX_PER_PAGE));
             })
             .catch(() => {
@@ -60,15 +65,12 @@ export function SalesTable(props: { start: DateTime, end: DateTime }) {
                                 isCompact
                                 showControls
                                 showShadow
+                                size="sm"
                                 color="secondary"
                                 page={page}
                                 total={pages}
                                 onChange={(page) => setPage(page)}
                             />
-                        </div>
-                        <div className="flex justify-center gap-10 font-bold text-green-400">
-                            <p>Total</p>
-                            <p>{formatNumberToCurrency(total)}</p>
                         </div>
                     </div>
 
@@ -81,11 +83,11 @@ export function SalesTable(props: { start: DateTime, end: DateTime }) {
                     {(item) => {
                         if (item.label === "TOTAL") {
                             return (
-                                <TableRow>
+                                <TableRow className="bg-white">
                                     <TableCell
-                                        className="font-extrabold text-green-300">Total</TableCell>
+                                        className="font-extrabold text-green-500">Total</TableCell>
                                     <TableCell
-                                        className="font-extrabold text-green-300">{item.value}</TableCell>
+                                        className="font-extrabold text-green-500">{item.value}</TableCell>
                                 </TableRow>
                             )
                         }

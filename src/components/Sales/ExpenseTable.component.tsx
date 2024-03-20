@@ -2,15 +2,19 @@
  * Sales Table
  */
 
-import { Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue } from "@nextui-org/react";
+import { Pagination, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue } from "@nextui-org/react";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
-import { SalesApiClient } from "src/libs/client/api/sales";
+import { ExpenseApiClient } from "src/libs/client/api/expense";
 import { formatNumberToCurrency } from "src/libs/utils/currency";
 
-export function ExpenseTable(props: { start: DateTime, end: DateTime }) {
+const MAX_PER_PAGE = 10;
+
+export function ExpenseTable(props: { start: DateTime, end: DateTime, totalCallback: (t:number)=>void }) {
     const [isLoading, setIsLoading] = useState(true);
-    const [rows, setRows] = useState<{ key: string, label: string, value: string }[]>([]);
+    const [rows, setRows] = useState<{ bill: string, comment: string, value: string }[]>([]);
+    const [page, setPage] = useState(1);
+    const [pages, setPages] = useState(0);
 
     const columns = [
         {
@@ -18,8 +22,8 @@ export function ExpenseTable(props: { start: DateTime, end: DateTime }) {
             label: "Bill"
         },
         {
-            key: "description",
-            label: "Description"
+            key: "comment",
+            label: "Comment"
         },
         {
             key: "value",
@@ -27,8 +31,34 @@ export function ExpenseTable(props: { start: DateTime, end: DateTime }) {
         }
     ]
     useEffect(() => {
-        setIsLoading(false)
-    }, [props]);
+        setIsLoading(true)
+        ExpenseApiClient.getExpenses(props.start.toJSDate(), props.end.toJSDate())
+            .then(res => {
+                const newRows: typeof rows = [];
+                res.forEach((exp => {
+                    newRows.push({
+                        bill: exp.billId,
+                        comment: exp.comment,
+                        value: formatNumberToCurrency(exp.amount)
+                    })
+                }));
+                const total = res.reduce((p: any, c) => (p + c.amount), 0);
+                props.totalCallback(total);
+                newRows.push({
+                    bill: "",
+                    comment: "TOTAL",
+                    value: formatNumberToCurrency(total)
+                })
+                setRows(newRows);
+                setPages(Math.ceil(newRows.length / MAX_PER_PAGE));
+            })
+            .catch(e => {
+
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
+    }, [props.end]);
 
     if (isLoading) {
         return <div className="flex justify-center">
@@ -37,24 +67,44 @@ export function ExpenseTable(props: { start: DateTime, end: DateTime }) {
     }
     return (
         <div className="flex flex-col gap-2">
-            <Table>
+            <Table
+                bottomContent={
+                    <div className="flex flex-col gap-3">
+                        <div className="flex justify-center">
+                            <Pagination
+                                isCompact
+                                showControls
+                                showShadow
+                                size="sm"
+                                color="secondary"
+                                page={page}
+                                total={pages}
+                                onChange={(page) => setPage(page)}
+                            />
+                        </div>
+                    </div>
+
+                }
+                bottomContentPlacement="outside"
+            >
                 <TableHeader columns={columns}>
                     {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
                 </TableHeader>
                 <TableBody items={rows}>
                     {(item) => {
-                        if (item.label === "TOTAL") {
+                        if (item.comment === "TOTAL") {
                             return (
-                                <TableRow>
+                                <TableRow key={item.bill} className="bg-white">
                                     <TableCell
-                                        className="font-extrabold text-green-300">Total</TableCell>
+                                        className="font-extrabold text-red-500">Total</TableCell>
+                                    <TableCell>{""}</TableCell>
                                     <TableCell
-                                        className="font-extrabold text-green-300">{item.value}</TableCell>
+                                        className="font-extrabold text-red-500">{item.value}</TableCell>
                                 </TableRow>
                             )
                         }
                         return (
-                            <TableRow key={item.key}>
+                            <TableRow key={item.bill}>
                                 {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
                             </TableRow>
                         )

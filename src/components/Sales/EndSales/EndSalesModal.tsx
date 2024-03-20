@@ -8,7 +8,7 @@ import { EndSalesForm } from "./EndSalesForm";
 export function EndSalesModal(props: { isOpen: boolean, onClose: () => void }) {
     const today = DateTime.now();
     return (
-        <Modal isOpen={props.isOpen} onClose={props.onClose} size="full">
+        <Modal isOpen={props.isOpen} onClose={props.onClose} size="5xl">
             <ModalContent>
                 <ModalHeader className="flex items-center justify-between gap-4">
                     End Sales for {today.toISODate()}
@@ -22,7 +22,7 @@ export function EndSalesModal(props: { isOpen: boolean, onClose: () => void }) {
                     />
                 </ModalHeader>
                 <ModalBody>
-                    <EndSalesForm start={today} end={today} />
+                    <EndSalesForm start={today.startOf('day')} end={today.endOf('day')} />
                 </ModalBody>
                 <ModalFooter>
                     <Button onClick={props.onClose}>Cancel</Button>

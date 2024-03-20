@@ -18,7 +18,6 @@ export async function GET(request: NextRequest, c: any, d: any) {
   const params = request.nextUrl.searchParams;
   const start = params.get("start");
   const end = params.get("end");
-  console.log(start, end);
   if (!!!start || !!!end) {
     return Response.json(SALES_ENDPOINT_ERRORS.START_AND_END_REQUIRED_ERR, {
       status: 400,
